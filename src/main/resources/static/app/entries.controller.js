@@ -18,7 +18,7 @@
         }
 
         function getAll() {
-            var url = "/entries/all";
+            var url = "/entries/";
             var entriesPromise = $http.get(url);
             entriesPromise.then(function(response){
                 vm.entries = response.data;
@@ -26,7 +26,7 @@
         }
 
         function getBalance(){
-            var url = "/entries/balance";
+            var url = "/balance";
             var entriesPromise = $http.get(url);
             entriesPromise.then(function(response){
                 vm.entries = response.data;
