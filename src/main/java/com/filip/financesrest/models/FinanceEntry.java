@@ -1,11 +1,11 @@
 package com.filip.financesrest.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
+@Table(name = "finance_entry")
 public class FinanceEntry
 {
     @Id
@@ -15,10 +15,28 @@ public class FinanceEntry
     private double value;
 
 
-    public FinanceEntry(String description, double value)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
+
+
+    public FinanceEntry(String description, double value, User user)
     {
         this.description = description;
         this.value = value;
+        this.user = user;
     }
 
     public FinanceEntry()

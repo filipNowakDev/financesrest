@@ -1,6 +1,8 @@
 package com.filip.financesrest.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,11 +10,28 @@ import java.util.Set;
 @Table(name = "user")
 public class User
 {
+    @JsonIgnore
     private long id;
     private String username;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String passwordConfirm;
+    @JsonIgnore
     private Set<Role> roles;
+    private Set<FinanceEntry> entries;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public Set<FinanceEntry> getEntries()
+    {
+        return entries;
+    }
+
+    public void setEntries(Set<FinanceEntry> entries)
+    {
+        this.entries = entries;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,7 +65,7 @@ public class User
         this.password = password;
     }
 
-    //@Transient
+    @Transient
     public String getPasswordConfirm()
     {
         return passwordConfirm;

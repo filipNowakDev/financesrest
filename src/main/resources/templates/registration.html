@@ -15,22 +15,30 @@
                     <fieldset>
                         <legend>Registration</legend>
 
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" class="form-control" th:field="*{username}"/>
+                        <div class="form-control">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Pick your username" class="form-control"
+                                   th:field="*{username}"/>
+                        </div>
                         <div class="alert alert-danger" th:errors="${userForm.username}">...</div>
 
 
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" th:field="*{password}"/>
+                        <div class="form-control">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Pick your password" class="form-control"
+                                   th:field="*{password}"/>
+                        </div>
                         <div class="alert alert-danger" th:errors="${userForm.password}">...</div>
 
-
-                        <label for="passwordConfirm">Confirm Password</label>
-                        <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" th:field="*{passwordConfirm}"/>
+                        <div class="form-control">
+                            <label for="passwordConfirm">Confirm Password</label>
+                            <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Repeat your password" class="form-control"
+                                   th:field="*{passwordConfirm}"/>
+                        </div>
                         <div class="alert alert-danger" th:errors="${userForm.passwordConfirm}">...</div>
 
 
-                        <div class="form-actions container">
+                        <div class="form-control">
                             <button type="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
                         </div>
                     </fieldset>
