@@ -8,31 +8,32 @@
 <nav th:replace="partial/nav :: navbar"/>
 
 <div class="row">
-    <div class="jumbotron col-lg-offset-2 col-lg-8">
+    <div class="container">
+        <div class="jumbotron">
 
-        <div class="btn-group" role="group">
-            <button ng-click="vm.getAll()" type="button" class="btn btn-default">All</button>
-            <button ng-click="vm.getBalance()" type="button" class="btn btn-default">Balance</button>
+            <div class="btn-group" role="group">
+                <button ng-click="vm.getAll()" type="button" class="btn btn-default">All</button>
+                <button ng-click="vm.getBalance()" type="button" class="btn btn-default">Balance</button>
 
+            </div>
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="entry in vm.entries">
+                    <td><span ng-bind="entry.description">loading...</span></td>
+                    <td><span ng-bind="entry.value">loading...</span></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Description</th>
-                <th>Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="entry in vm.entries">
-                <td><span ng-bind="entry.description">loading...</span></td>
-                <td><span ng-bind="entry.value">loading...</span></td>
-            </tr>
-            </tbody>
-        </table>
     </div>
-
 
 </div>
 

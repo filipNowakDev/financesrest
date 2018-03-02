@@ -1,4 +1,4 @@
-(function(){
+(function () {
     'use strict';
     angular
         .module('app')
@@ -18,17 +18,17 @@
         }
 
         function getAll() {
-            var url = "/entries/";
+            var url = "/api/entries/";
             var entriesPromise = $http.get(url);
-            entriesPromise.then(function(response){
+            entriesPromise.then(function (response) {
                 vm.entries = response.data;
             });
         }
 
-        function getBalance(){
-            var url = "/balance";
+        function getBalance() {
+            var url = "/api/balance";
             var entriesPromise = $http.get(url);
-            entriesPromise.then(function(response){
+            entriesPromise.then(function (response) {
                 vm.entries = response.data;
             });
         }

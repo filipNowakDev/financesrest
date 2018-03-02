@@ -14,6 +14,7 @@ public class FinanceEntry
     private String description;
     private double value;
 
+
     public FinanceEntry(String description, double value)
     {
         this.description = description;

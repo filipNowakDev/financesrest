@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+<body>
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+
+
+            <form th:action="@{/registration}" th:object="${userForm}" method="post">
+                <div class="container">
+                    <fieldset>
+                        <legend>Registration</legend>
+
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" th:field="*{username}"/>
+                        <div class="alert alert-danger" th:errors="${userForm.username}">...</div>
+
+
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" th:field="*{password}"/>
+                        <div class="alert alert-danger" th:errors="${userForm.password}">...</div>
+
+
+                        <label for="passwordConfirm">Confirm Password</label>
+                        <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" th:field="*{passwordConfirm}"/>
+                        <div class="alert alert-danger" th:errors="${userForm.passwordConfirm}">...</div>
+
+
+                        <div class="form-actions container">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
+</body>
+</html>

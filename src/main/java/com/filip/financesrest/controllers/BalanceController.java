@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/balance")
+@RequestMapping("api/balance")
 public class BalanceController
 {
     @Autowired

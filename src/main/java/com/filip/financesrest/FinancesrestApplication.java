@@ -2,10 +2,19 @@ package com.filip.financesrest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class FinancesrestApplication {
-	public static void main(String[] args) {
-	    SpringApplication.run(FinancesrestApplication.class, args);
-	}
+public class FinancesrestApplication extends SpringBootServletInitializer
+{
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(FinancesrestApplication.class);
+    }
+
+    public static void main(String[] args)
+    {
+        SpringApplication.run(FinancesrestApplication.class, args);
+    }
 }
