@@ -31,7 +31,7 @@ public class RestBalanceController
     {
         User currentUser = userService.findByUsername(authentication.getName());
 
-        Set<FinanceEntry> entries = currentUser.getEntries();
+        List<FinanceEntry> entries = currentUser.getEntries();
         double sum = 0;
 
         for (FinanceEntry entry : entries)
@@ -39,7 +39,7 @@ public class RestBalanceController
             sum += entry.getValue();
         }
         //TODO FIX THAT
-        FinanceEntry result = new FinanceEntry("Balance", sum, new User());
+        FinanceEntry result = new FinanceEntry("Balance", sum, null, new User());
         Set<FinanceEntry> reslist = new HashSet<>();
         reslist.add(result);
         return reslist;

@@ -26,8 +26,9 @@ public class EntryValidator implements Validator
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
 
-
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "value", "NotEmpty");
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "NotEmpty");
 
     }
 }

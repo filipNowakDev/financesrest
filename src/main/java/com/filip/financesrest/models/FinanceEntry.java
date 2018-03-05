@@ -1,8 +1,12 @@
 package com.filip.financesrest.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "finance_entry")
@@ -13,6 +17,8 @@ public class FinanceEntry
     private long id;
     private String description;
     private double value;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
 
     @ManyToOne
@@ -30,12 +36,21 @@ public class FinanceEntry
         this.user = user;
     }
 
+    public LocalDate getDate()
+    {
+        return date;
+    }
 
+    public void setDate(LocalDate date)
+    {
+        this.date = date;
+    }
 
-    public FinanceEntry(String description, double value, User user)
+    public FinanceEntry(String description, double value, LocalDate date, User user)
     {
         this.description = description;
         this.value = value;
+        this.date = date;
         this.user = user;
     }
 

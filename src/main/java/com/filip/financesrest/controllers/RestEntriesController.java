@@ -24,7 +24,7 @@ public class RestEntriesController
     UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Set<FinanceEntry> getAll(Authentication authentication)
+    public List<FinanceEntry> getAll(Authentication authentication)
     {
         User currentUser = userService.findByUsername(authentication.getName());
         return currentUser.getEntries();

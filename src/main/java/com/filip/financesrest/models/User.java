@@ -4,6 +4,7 @@ package com.filip.financesrest.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,16 +20,16 @@ public class User
     private String passwordConfirm;
     @JsonIgnore
     private Set<Role> roles;
-    private Set<FinanceEntry> entries;
+    private List<FinanceEntry> entries;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public Set<FinanceEntry> getEntries()
+    public List<FinanceEntry> getEntries()
     {
         return entries;
     }
 
-    public void setEntries(Set<FinanceEntry> entries)
+    public void setEntries(List<FinanceEntry> entries)
     {
         this.entries = entries;
     }

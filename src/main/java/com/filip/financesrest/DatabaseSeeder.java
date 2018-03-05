@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,10 +59,10 @@ public class DatabaseSeeder implements CommandLineRunner
 
 
         List<FinanceEntry> entries = new ArrayList<>();
-        entries.add(new FinanceEntry("Bought a new car", -30000, user1));
-        entries.add(new FinanceEntry("Received a monthly pay", 13000, user1));
-        entries.add(new FinanceEntry("Received a spouse's monthly pay", 40000, user2));
-        entries.add(new FinanceEntry("Bought food", 8500, user2));
+        entries.add(new FinanceEntry("Bought a new car", -30000, LocalDate.of(2017, 10, 5), user1));
+        entries.add(new FinanceEntry("Received a monthly pay", 13000,LocalDate.of(2017, 9, 13), user1));
+        entries.add(new FinanceEntry("Received a spouse's monthly pay", 40000,LocalDate.of(2016, 5, 27), user2));
+        entries.add(new FinanceEntry("Bought food", 8500,LocalDate.of(2017, 12, 13), user2));
         entriesRepository.save(entries);
     }
 }

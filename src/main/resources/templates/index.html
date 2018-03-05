@@ -3,35 +3,35 @@
 
 <head th:replace="partial/header :: header"/>
 
-<body ng-app="app" ng-controller="EntriesController as vm">
+<body>
 
 <nav th:replace="partial/nav :: navbar"/>
 
 <div class="row">
     <div class="container">
-        <div class="jumbotron">
+        <div  class="jumbotron">
 
-            <div class="btn-group" role="group">
-                <button ng-click="vm.getAll()" type="button" class="btn btn-default">All</button>
-                <button ng-click="vm.getBalance()" type="button" class="btn btn-default">Balance</button>
-
-            </div>
-
-
-            <table class="table">
+            <table th:if="${not #sets.isEmpty(entries)}" class="table">
                 <thead>
                 <tr>
                     <th>Description</th>
-                    <th>Value</th>
+                    <th><a href='/entries/date'>Date</a></th>
+                    <th><a href='/entries/value'>Value</a></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="entry in vm.entries">
-                    <td><span ng-bind="entry.description">loading...</span></td>
-                    <td><span ng-bind="entry.value">loading...</span></td>
+                <tr th:each="entry : ${entries}">
+                    <td th:text="${entry.description}"></td>
+                    <td th:text="${entry.date}"></td>
+                    <td th:text="${entry.value}"></td>
                 </tr>
                 </tbody>
             </table>
+            <a class="btn btn-primary active" href="/entries/create">Add Entry</a>
+        </div>
+        <div class="jumbotron">
+            <h3>Balance</h3>
+            <p th:text="${balance}"></p>
         </div>
     </div>
 

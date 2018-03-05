@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ViewController {
     @RequestMapping("/")
     public String index(Model model){
-        return "index";
+        return "redirect:/entries";
     }
 
     @RequestMapping("/login")
