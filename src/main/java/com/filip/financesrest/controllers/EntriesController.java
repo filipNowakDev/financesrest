@@ -1,46 +1,53 @@
 package com.filip.financesrest.controllers;
 
 
+import com.filip.financesrest.components.EntryValidator;
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
 import com.filip.financesrest.repositories.EntriesRepository;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-@RestController
-@RequestMapping("api/entries")
+@Controller
+@RequestMapping(value = "/entries")
 public class EntriesController
 {
 
     @Autowired
+    private EntryValidator entryValidator;
+    @Autowired
     private EntriesRepository entriesRepository;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Set<FinanceEntry> getAll(Authentication authentication)
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String entryForm(Model model)
     {
-        User currentUser = userService.findByUsername(authentication.getName());
-        return currentUser.getEntries();
+
+        model.addAttribute("entryForm", new FinanceEntry());
+        return "entryform";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public List<FinanceEntry> save(@RequestBody FinanceEntry input)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String addEntry(@ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, Model model, Authentication authentication)
     {
-        entriesRepository.save(input);
-        return this.entriesRepository.findAll();
-    }
+        entryValidator.validate(entryForm, bindingResult);
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
-    public List<FinanceEntry> save(@PathVariable long id)
-    {
-        entriesRepository.delete(id);
-        return this.entriesRepository.findAll();
+        if (bindingResult.hasErrors())
+        {
+            return "entryform";
+        }
+
+        entryForm.setUser(userService.findByUsername(authentication.getName()));
+        entriesRepository.save(entryForm);
+        return "redirect:/";
+
     }
 }

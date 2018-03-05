@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+<body>
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+            <form name="f" th:action="@{/entries/create}" th:object="${entryForm}" method="post">
+                <div class="container">
+                    <fieldset>
+                        <legend>Add entry</legend>
+                        <div class="form-control">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" name="description" placeholder="Give your entry a description" class="form-control"
+                                    th:field="*{description}"/>
+                        </div>
+                        <div class="form-control">
+                            <label for="value">Value</label>
+                            <input type="number" id="value" name="value" placeholder="Negative is expense, positive is income" class="form-control"
+                                    th:field = "*{value}"/>
+                        </div>
+                        <div class="form-control">
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
+</body>
+</html>

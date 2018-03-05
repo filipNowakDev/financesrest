@@ -18,7 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("api/balance")
-public class BalanceController
+public class RestBalanceController
 {
     @Autowired
     private EntriesRepository entriesRepository;
