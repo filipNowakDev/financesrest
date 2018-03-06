@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+<body>
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="text-center">403 - Forbidden</h1>
+            <div class="text-center alert alert-danger">
+                <p>Sorry, you are not allowed to see this page.</p>
+            </div>
+            <a class="btn btn-primary active" href="/">Home</a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
+</body>
+</html>

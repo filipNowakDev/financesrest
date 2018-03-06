@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+<body>
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+            <form name="f" th:action="@{/entries/edit/} + ${entry.id}" th:object="${entry}" method="post">
+                <div class="container">
+                    <fieldset>
+                        <legend>Edit entry</legend>
+                        <div class="form-control">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" name="description" class="form-control"
+                                   th:field="*{description}"/>
+                            <div class="alert alert-danger" th:errors="${entry.description}">...</div>
+
+                        </div>
+                        <div class="form-control">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" class="form-control"
+                                   th:field="*{date}"/>
+                        </div>
+                        <div class="alert alert-danger" th:errors="${entry.date}">...</div>
+
+                        <div class="form-control">
+                            <label for="value">Value</label>
+                            <input type="number" id="value" name="value" step="0.01" class="form-control"
+                                   th:field="*{value}"/>
+                        </div>
+
+                        <div class="alert alert-danger" th:errors="${entry.value}">...</div>
+                        <div class="form-control">
+                            <div class=" btn-group btn-group-lg">
+                                <button class="btn btn-primary active" type="submit">Save</button>
+                                <button class="btn btn-danger active" type="reset">Reset</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
+</body>
+</html>

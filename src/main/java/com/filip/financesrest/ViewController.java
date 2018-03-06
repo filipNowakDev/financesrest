@@ -17,4 +17,10 @@ public class ViewController {
     {
         return "login";
     }
+
+    @RequestMapping("/accessDenied")
+    public String accessDenied(Model model)
+    {
+        return "accessDenied";
+    }
 }

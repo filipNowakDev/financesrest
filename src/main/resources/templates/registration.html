@@ -9,41 +9,45 @@
     <div class="container">
         <div class="jumbotron">
 
+            <div class="form-group">
+                <form th:action="@{/registration}" th:object="${userForm}" method="post">
+                    <div class="container">
+                        <fieldset>
+                            <legend>Registration</legend>
 
-            <form th:action="@{/registration}" th:object="${userForm}" method="post">
-                <div class="container">
-                    <fieldset>
-                        <legend>Registration</legend>
-
-                        <div class="form-control">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" placeholder="Pick your username" class="form-control"
-                                   th:field="*{username}"/>
-                        </div>
-                        <div class="alert alert-danger" th:errors="${userForm.username}">...</div>
-
-
-                        <div class="form-control">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password" placeholder="Pick your password" class="form-control"
-                                   th:field="*{password}"/>
-                        </div>
-                        <div class="alert alert-danger" th:errors="${userForm.password}">...</div>
-
-                        <div class="form-control">
-                            <label for="passwordConfirm">Confirm Password</label>
-                            <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Repeat your password" class="form-control"
-                                   th:field="*{passwordConfirm}"/>
-                        </div>
-                        <div class="alert alert-danger" th:errors="${userForm.passwordConfirm}">...</div>
+                            <div class="form-control">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" placeholder="Pick your username"
+                                       class="form-control"
+                                       th:field="*{username}"/>
+                            </div>
+                            <div class="alert alert-danger" th:errors="${userForm.username}">...</div>
 
 
-                        <div class="form-control">
-                            <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
-                        </div>
-                    </fieldset>
-                </div>
-            </form>
+                            <div class="form-control">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" placeholder="Pick your password"
+                                       class="form-control"
+                                       th:field="*{password}"/>
+                            </div>
+                            <div class="alert alert-danger" th:errors="${userForm.password}">...</div>
+
+                            <div class="form-control">
+                                <label for="passwordConfirm">Confirm Password</label>
+                                <input type="password" id="passwordConfirm" name="passwordConfirm"
+                                       placeholder="Repeat your password" class="form-control"
+                                       th:field="*{passwordConfirm}"/>
+                            </div>
+                            <div class="alert alert-danger" th:errors="${userForm.passwordConfirm}">...</div>
+
+
+                            <div class="form-control">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

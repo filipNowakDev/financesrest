@@ -9,14 +9,14 @@
 
 <div class="row">
     <div class="container">
-        <div  class="jumbotron">
+        <div class="jumbotron">
 
             <table th:if="${not #sets.isEmpty(entries)}" class="table">
                 <thead>
                 <tr>
                     <th>Description</th>
-                    <th><a href='/entries/date'>Date</a></th>
-                    <th><a href='/entries/value'>Value</a></th>
+                    <th>Date <a href="/entries/date/asc">&uarr;</a> <a href="/entries/date/desc">&darr;</a></th>
+                    <th>Value <a href="/entries/value/asc">&uarr;</a> <a href="/entries/value/desc">&darr;</a></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +24,16 @@
                     <td th:text="${entry.description}"></td>
                     <td th:text="${entry.date}"></td>
                     <td th:text="${entry.value}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <form method="post" th:action="@{/entries/delete/} + ${entry.id}">
+                                <button type="submit" class="btn btn-danger active">Delete</button>
+                            </form>
+                            <form method="get" th:action="@{/entries/edit/} + ${entry.id}">
+                                <button type="submit" class="btn btn-primary active">Edit</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
