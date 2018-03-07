@@ -30,5 +30,12 @@ public class EntryValidator implements Validator
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "NotEmpty");
 
+        if(entry.getDate() == null)
+        {
+            //errors.
+            errors.rejectValue("date", "Format.entryForm.date");
+        }
+
+
     }
 }
