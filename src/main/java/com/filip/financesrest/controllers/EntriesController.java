@@ -4,7 +4,7 @@ package com.filip.financesrest.controllers;
 import com.filip.financesrest.components.EntryValidator;
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntriesRepository;
+import com.filip.financesrest.services.EntryService;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +25,7 @@ public class EntriesController
     @Autowired
     private EntryValidator entryValidator;
     @Autowired
-    private EntriesRepository entriesRepository;
+    private EntryService entryService;
     @Autowired
     private UserService userService;
 
@@ -41,7 +40,7 @@ public class EntriesController
 
 
         model.addAttribute("entries", entries);
-        model.addAttribute("balance", getBalance(authentication));
+        model.addAttribute("balance", entryService.getBalance(authentication));
         return "index";
     }
 
@@ -72,7 +71,7 @@ public class EntriesController
 
 
         model.addAttribute("entries", entries);
-        model.addAttribute("balance", getBalance(authentication));
+        model.addAttribute("balance", entryService.getBalance(authentication));
         return "index";
     }
 
@@ -96,16 +95,17 @@ public class EntriesController
         }
 
         entryForm.setUser(userService.findByUsername(authentication.getName()));
-        entriesRepository.save(entryForm);
+        entryService.save(entryForm);
         return "redirect:/entries";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editEntryForm(@PathVariable Long id, Model model, Authentication authentication)
     {
-        FinanceEntry entry = entriesRepository.findOne(id);
-        if(entry.getUser().getUsername().equals(authentication.getName()))
+
+        if(entryService.isOwner(authentication, id))
         {
+            FinanceEntry entry = entryService.findOne(id);
             model.addAttribute("entry", entry);
             return "entryedit";
         }
@@ -114,7 +114,7 @@ public class EntriesController
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editEntry(@PathVariable Long id, @ModelAttribute("entry") FinanceEntry entry, Model model, BindingResult bindingResult, Authentication authentication)
+    public String editEntry(@PathVariable Long id, @ModelAttribute("entry") FinanceEntry entry, BindingResult bindingResult, Model model, Authentication authentication)
     {
         entryValidator.validate(entry, bindingResult);
 
@@ -123,12 +123,12 @@ public class EntriesController
             return "entryedit";
         }
 
-        FinanceEntry testEntry = entriesRepository.findOne(id);
-        if(testEntry.getUser().getUsername().equals(authentication.getName()))
+
+        if(entryService.isOwner(authentication, id))
         {
             entry.setUser(userService.findByUsername(authentication.getName()));
             entry.setId(id);
-            entriesRepository.save(entry);
+            entryService.save(entry);
             return "redirect:/";
         }
         else
@@ -139,26 +139,13 @@ public class EntriesController
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteEntry(@PathVariable Long id, Authentication authentication)
     {
-        FinanceEntry entry = entriesRepository.findOne(id);
+        FinanceEntry entry = entryService.findOne(id);
         if(entry.getUser().getUsername().equals(authentication.getName()))
         {
-            entriesRepository.delete(id);
+            entryService.delete(id);
             return "redirect:/entries";
         }
         else
             return "redirect:/accessDenied";
-    }
-
-
-    private Double getBalance(Authentication authentication)
-    {
-        User user = userService.findByUsername(authentication.getName());
-        List<FinanceEntry> entries = user.getEntries();
-        Double sum = new Double(0);
-        for(FinanceEntry entry : entries)
-        {
-            sum += entry.getValue();
-        }
-        return sum;
     }
 }
