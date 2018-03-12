@@ -12,18 +12,33 @@ import java.util.Set;
 public class User
 {
     @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private String username;
+
     @JsonIgnore
     private String password;
-    @JsonIgnore
-    private String passwordConfirm;
-    @JsonIgnore
-    private Set<Role> roles;
-    private List<FinanceEntry> entries;
 
+    @JsonIgnore
+    @Transient
+    private String passwordConfirm;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FinanceEntry> entries;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<EntryCategory> categories;
+
+
+
+
     public List<FinanceEntry> getEntries()
     {
         return entries;
@@ -34,8 +49,6 @@ public class User
         this.entries = entries;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId()
     {
         return id;
@@ -66,7 +79,6 @@ public class User
         this.password = password;
     }
 
-    @Transient
     public String getPasswordConfirm()
     {
         return passwordConfirm;
@@ -77,9 +89,6 @@ public class User
         this.passwordConfirm = passwordConfirm;
     }
 
-
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     public Set<Role> getRoles()
     {
         return roles;
@@ -88,5 +97,15 @@ public class User
     public void setRoles(Set<Role> roles)
     {
         this.roles = roles;
+    }
+
+    public List<EntryCategory> getCategories()
+    {
+        return categories;
+    }
+
+    public void setCategories(List<EntryCategory> categories)
+    {
+        this.categories = categories;
     }
 }

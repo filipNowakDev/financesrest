@@ -18,36 +18,25 @@ public class FinanceEntry
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+
     private String description;
+
     private double value;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    public User getUser()
-    {
-        return user;
-    }
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
+    private EntryCategory category;
 
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
 
-    public LocalDate getDate()
-    {
-        return date;
-    }
-
-    public void setDate(LocalDate date)
-    {
-        this.date = date;
-    }
 
     public FinanceEntry(String description, double value, LocalDate date, User user)
     {
@@ -57,10 +46,12 @@ public class FinanceEntry
         this.user = user;
     }
 
-    public FinanceEntry()
-    {
-    }
+    public FinanceEntry() { }
 
+    public User getUser()
+    {
+        return user;
+    }
 
     public long getId()
     {
@@ -90,5 +81,30 @@ public class FinanceEntry
     public void setValue(double value)
     {
         this.value = value;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
+    public LocalDate getDate()
+    {
+        return date;
+    }
+
+    public void setDate(LocalDate date)
+    {
+        this.date = date;
+    }
+
+    public EntryCategory getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(EntryCategory category)
+    {
+        this.category = category;
     }
 }

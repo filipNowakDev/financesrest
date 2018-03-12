@@ -37,7 +37,6 @@ public class RestBalanceController
         {
             sum += entry.getValue();
         }
-        //TODO FIX THAT
         FinanceEntry result = new FinanceEntry("Balance", sum, null, new User());
         Set<FinanceEntry> reslist = new HashSet<>();
         reslist.add(result);
