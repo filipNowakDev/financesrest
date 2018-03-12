@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EntriesRepository extends JpaRepository<FinanceEntry, Long> {
+public interface EntryRepository extends JpaRepository<FinanceEntry, Long> {
     List<FinanceEntry> findByUser_UsernameOrderByDateAsc(String username);
     List<FinanceEntry> findByUser_UsernameOrderByDateDesc(String username);
     List<FinanceEntry> findByUser_UsernameOrderByValueAsc(String username);

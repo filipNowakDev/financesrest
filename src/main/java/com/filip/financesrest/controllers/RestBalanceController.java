@@ -3,7 +3,7 @@ package com.filip.financesrest.controllers;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntriesRepository;
+import com.filip.financesrest.repositories.EntryRepository;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +20,7 @@ import java.util.Set;
 public class RestBalanceController
 {
     @Autowired
-    private EntriesRepository entriesRepository;
+    private EntryRepository entryRepository;
     @Autowired
     UserService userService;
 

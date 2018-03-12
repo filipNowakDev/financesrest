@@ -3,15 +3,13 @@ package com.filip.financesrest.controllers;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntriesRepository;
+import com.filip.financesrest.repositories.EntryRepository;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/entries")
@@ -19,7 +17,7 @@ public class RestEntriesController
 {
 
     @Autowired
-    private EntriesRepository entriesRepository;
+    private EntryRepository entryRepository;
     @Autowired
     UserService userService;
 
@@ -33,14 +31,14 @@ public class RestEntriesController
     @RequestMapping(method = RequestMethod.POST)
     public List<FinanceEntry> save(@RequestBody FinanceEntry input)
     {
-        entriesRepository.save(input);
-        return this.entriesRepository.findAll();
+        entryRepository.save(input);
+        return this.entryRepository.findAll();
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
     public List<FinanceEntry> save(@PathVariable long id)
     {
-        entriesRepository.delete(id);
-        return this.entriesRepository.findAll();
+        entryRepository.delete(id);
+        return this.entryRepository.findAll();
     }
 }

@@ -1,11 +1,9 @@
 package com.filip.financesrest;
 
 import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.models.Role;
 import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntriesRepository;
+import com.filip.financesrest.repositories.EntryRepository;
 import com.filip.financesrest.repositories.RoleRepository;
-import com.filip.financesrest.repositories.UserRepository;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,20 +11,18 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner
 {
-    private EntriesRepository entriesRepository;
+    private EntryRepository entryRepository;
     private UserService userService;
     private RoleRepository roleRepository;
     @Autowired
-    public DatabaseSeeder(EntriesRepository entriesRepository, UserService userService, RoleRepository roleRepository)
+    public DatabaseSeeder(EntryRepository entryRepository, UserService userService, RoleRepository roleRepository)
     {
-        this.entriesRepository = entriesRepository;
+        this.entryRepository = entryRepository;
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
@@ -63,6 +59,6 @@ public class DatabaseSeeder implements CommandLineRunner
         entries.add(new FinanceEntry("Received a monthly pay", 13000,LocalDate.of(2017, 9, 13), user1));
         entries.add(new FinanceEntry("Received a spouse's monthly pay", 40000,LocalDate.of(2016, 5, 27), user2));
         entries.add(new FinanceEntry("Bought food", 8500,LocalDate.of(2017, 12, 13), user2));
-        entriesRepository.save(entries);
+        entryRepository.save(entries);
     }
 }

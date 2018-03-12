@@ -34,9 +34,7 @@ public class EntriesController
     @RequestMapping(method = RequestMethod.GET)
     public String allEntries(Model model, Authentication authentication)
     {
-        User currentUser = userService.findByUsername(authentication.getName());
-        List<FinanceEntry> entries = currentUser.getEntries();
-        Collections.sort(entries, Comparator.comparing(FinanceEntry::getDate));
+        List<FinanceEntry> entries = entryService.findByUser_UsernameOrderByDateDesc(authentication.getName());
 
 
         model.addAttribute("entries", entries);
@@ -47,27 +45,25 @@ public class EntriesController
     @RequestMapping(value = "/{sort}/{order}", method = RequestMethod.GET)
     public String allEntries(@PathVariable String sort, @PathVariable String order, Model model, Authentication authentication)
     {
-        User currentUser = userService.findByUsername(authentication.getName());
-        List<FinanceEntry> entries = currentUser.getEntries();
+        List<FinanceEntry> entries;
 
         if(sort.equals("date"))
         {
             if(order.equals("desc"))
-                Collections.sort(entries, Comparator.comparing(FinanceEntry::getDate).reversed());
+                entries = entryService.findByUser_UsernameOrderByDateDesc(authentication.getName());
             else
-                Collections.sort(entries, Comparator.comparing(FinanceEntry::getDate));
+                entries = entryService.findByUser_UsernameOrderByDateAsc(authentication.getName());
         }
 
         else if(sort.equals("value"))
         {
             if(order.equals("desc"))
-                Collections.sort(entries, Comparator.comparing(FinanceEntry::getValue).reversed());
+                entries = entryService.findByUser_UsernameOrderByValueDesc(authentication.getName());
             else
-                Collections.sort(entries, Comparator.comparing(FinanceEntry::getValue));
-
+                entries = entryService.findByUser_UsernameOrderByValueAsc(authentication.getName());
         }
         else
-            Collections.sort(entries, Comparator.comparing(FinanceEntry::getDate));
+            entries = entryService.findByUser_UsernameOrderByDateAsc(authentication.getName());
 
 
         model.addAttribute("entries", entries);

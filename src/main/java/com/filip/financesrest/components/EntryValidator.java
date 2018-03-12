@@ -1,10 +1,6 @@
 package com.filip.financesrest.components;
 
 import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntriesRepository;
-import com.filip.financesrest.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
