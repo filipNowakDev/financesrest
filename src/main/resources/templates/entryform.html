@@ -35,8 +35,15 @@
                                        placeholder="Negative is expense, positive is income" class="form-control"
                                        th:field="*{value}"/>
                             </div>
-
                             <div class="alert alert-danger" th:errors="${entryForm.value}">...</div>
+
+                            <div class="form-control">
+                                <label for="categoryId">Category (select one):</label>
+                                <select class="form-control" name="categoryId" id="categoryId">
+                                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">...</option>
+                                </select>
+                            </div>
+
                             <div class="form-control">
                                 <div class=" btn-group btn-group-lg">
                                     <button class="btn btn-primary active" type="submit">Save</button>

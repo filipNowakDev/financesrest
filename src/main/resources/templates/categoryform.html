@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
 <body>
-$END$
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+            <div class="form-group">
+                <form name="f" th:action="@{/categories/create}" th:object="${categoryForm}" method="post">
+                    <div class="container">
+                        <fieldset>
+                            <legend>Add entry</legend>
+                            <div class="form-control">
+                                <label for="name">Description</label>
+                                <input type="text" id="name" name="name"
+                                       placeholder="Give your entry a description" class="form-control"
+                                       th:field="*{name}"/>
+                                <div class="alert alert-danger" th:errors="${categoryForm.name}">...</div>
+
+                            </div>
+                            <div class="form-control">
+                                <div class=" btn-group btn-group-lg">
+                                    <button class="btn btn-primary active" type="submit">Save</button>
+                                    <button class="btn btn-danger active" type="reset">Reset</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
 </body>
 </html>

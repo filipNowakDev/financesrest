@@ -38,12 +38,13 @@ public class FinanceEntry
 
 
 
-    public FinanceEntry(String description, double value, LocalDate date, User user)
+    public FinanceEntry(String description, double value, LocalDate date, User user, EntryCategory category)
     {
         this.description = description;
         this.value = value;
         this.date = date;
         this.user = user;
+        this.category = category;
     }
 
     public FinanceEntry() { }

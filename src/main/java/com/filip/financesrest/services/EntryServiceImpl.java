@@ -88,6 +88,11 @@ public class EntryServiceImpl implements EntryService
         return entryRepository.findByUser_UsernameOrderByValueDesc(username);
     }
 
+    @Override
+    public List<FinanceEntry> findByUser_UsernameAndCategory_Id(String username, Long id)
+    {
+        return entryRepository.findByUser_UsernameAndCategory_Id(username, id);
+    }
 
     @Override
     public Double getBalance(Authentication authentication)

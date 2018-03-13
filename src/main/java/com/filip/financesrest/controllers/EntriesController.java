@@ -3,7 +3,7 @@ package com.filip.financesrest.controllers;
 
 import com.filip.financesrest.components.EntryValidator;
 import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.models.User;
+import com.filip.financesrest.repositories.CategoryRepository;
 import com.filip.financesrest.services.EntryService;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -28,6 +26,8 @@ public class EntriesController
     private EntryService entryService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
 
 
@@ -73,24 +73,28 @@ public class EntriesController
 
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String entryForm(Model model)
+    public String entryForm(Model model, Authentication authentication)
     {
         model.addAttribute("entryForm", new FinanceEntry());
+        model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
         return "entryform";
     }
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String addEntry(@ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, Model model, Authentication authentication)
+    public String addEntry(@ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
     {
         entryValidator.validate(entryForm, bindingResult);
 
         if (bindingResult.hasErrors())
         {
+            model.addAttribute("entryForm", new FinanceEntry());
+            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
             return "entryform";
         }
 
         entryForm.setUser(userService.findByUsername(authentication.getName()));
+        entryForm.setCategory(categoryRepository.findOne(categoryId));
         entryService.save(entryForm);
         return "redirect:/entries";
     }
@@ -101,8 +105,9 @@ public class EntriesController
 
         if(entryService.isOwner(authentication, id))
         {
-            FinanceEntry entry = entryService.findOne(id);
-            model.addAttribute("entry", entry);
+            FinanceEntry entryForm = entryService.findOne(id);
+            model.addAttribute("entryForm", entryForm);
+            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
             return "entryedit";
         }
         else
@@ -110,21 +115,24 @@ public class EntriesController
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editEntry(@PathVariable Long id, @ModelAttribute("entry") FinanceEntry entry, BindingResult bindingResult, Model model, Authentication authentication)
+    public String editEntry(@PathVariable Long id, @ModelAttribute("entry") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
     {
-        entryValidator.validate(entry, bindingResult);
+        entryValidator.validate(entryForm, bindingResult);
 
         if (bindingResult.hasErrors())
         {
+            model.addAttribute("entryForm", entryForm);
+            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
             return "entryedit";
         }
 
 
         if(entryService.isOwner(authentication, id))
         {
-            entry.setUser(userService.findByUsername(authentication.getName()));
-            entry.setId(id);
-            entryService.save(entry);
+            entryForm.setUser(userService.findByUsername(authentication.getName()));
+            entryForm.setId(id);
+            entryForm.setCategory(categoryRepository.findOne(categoryId));
+            entryService.save(entryForm);
             return "redirect:/";
         }
         else
