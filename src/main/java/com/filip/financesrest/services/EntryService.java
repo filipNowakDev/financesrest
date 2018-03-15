@@ -16,6 +16,7 @@ public interface EntryService
     public Boolean isOwner(User user, Long id);
     public Boolean isOwner(Authentication authentication, Long id);
     Double getBalance(Authentication authentication);
+    Double getBalanceByCategory(Long categoryId);
     List<FinanceEntry> findByUser_UsernameOrderByDateAsc(String username);
     List<FinanceEntry> findByUser_UsernameOrderByDateDesc(String username);
     List<FinanceEntry> findByUser_UsernameOrderByValueAsc(String username);

@@ -4,6 +4,8 @@ package com.filip.financesrest.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,6 +16,8 @@ public class EntryCategory
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotNull
+    @Size(min = 3, message = "Category name must be at least 3 characters long.")
     private String name;
 
     @ManyToOne

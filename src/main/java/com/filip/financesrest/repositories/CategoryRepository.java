@@ -11,4 +11,5 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<EntryCategory, Long>
 {
     List<EntryCategory> findByUser_Username(String username);
+    List<EntryCategory> findByUser_UsernameOrderByName(String username);
 }

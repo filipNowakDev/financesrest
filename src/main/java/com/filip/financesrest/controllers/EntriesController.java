@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,8 +21,6 @@ import java.util.List;
 public class EntriesController
 {
 
-    @Autowired
-    private EntryValidator entryValidator;
     @Autowired
     private EntryService entryService;
     @Autowired
@@ -39,6 +38,14 @@ public class EntriesController
 
         model.addAttribute("entries", entries);
         model.addAttribute("balance", entryService.getBalance(authentication));
+        return "index";
+    }
+
+    @RequestMapping(value = "/category/{id}")
+    public String entriesByCategory(@PathVariable Long id, Model model, Authentication authentication)
+    {
+        model.addAttribute("entries", categoryRepository.findOne(id).getEntries());
+        model.addAttribute("balance", entryService.getBalanceByCategory(id));
         return "index";
     }
 
@@ -76,19 +83,16 @@ public class EntriesController
     public String entryForm(Model model, Authentication authentication)
     {
         model.addAttribute("entryForm", new FinanceEntry());
-        model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
+        model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
         return "entryform";
     }
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String addEntry(@ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
+    public String addEntry(@Valid @ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
     {
-        entryValidator.validate(entryForm, bindingResult);
-
         if (bindingResult.hasErrors())
         {
-            model.addAttribute("entryForm", new FinanceEntry());
             model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
             return "entryform";
         }
@@ -103,27 +107,30 @@ public class EntriesController
     public String editEntryForm(@PathVariable Long id, Model model, Authentication authentication)
     {
 
+        FinanceEntry entryForm = entryService.findOne(id);
+        if(entryForm == null)
+        {
+            return "redirect:/accessDenied";
+        }
         if(entryService.isOwner(authentication, id))
         {
-            FinanceEntry entryForm = entryService.findOne(id);
             model.addAttribute("entryForm", entryForm);
-            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
-            return "entryedit";
+            model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
+            return "entryform";
         }
         else
             return "redirect:/accessDenied";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editEntry(@PathVariable Long id, @ModelAttribute("entry") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
+    /*@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String editEntry(@PathVariable Long id, @Valid @ModelAttribute("entry") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
     {
-        entryValidator.validate(entryForm, bindingResult);
+        //entryValidator.validate(entryForm, bindingResult);
 
         if (bindingResult.hasErrors())
         {
-            model.addAttribute("entryForm", entryForm);
             model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
-            return "entryedit";
+            return "entryform";
         }
 
 
@@ -138,12 +145,16 @@ public class EntriesController
         else
             return "redirect:/accessDenied";
 
-    }
+    }*/
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteEntry(@PathVariable Long id, Authentication authentication)
     {
         FinanceEntry entry = entryService.findOne(id);
+        if(entry == null)
+        {
+            return "redirect:/accessDenied";
+        }
         if(entry.getUser().getUsername().equals(authentication.getName()))
         {
             entryService.delete(id);

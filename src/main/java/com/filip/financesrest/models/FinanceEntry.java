@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -19,10 +20,14 @@ public class FinanceEntry
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
+    @NotNull
+    @Size(min = 3, message = "Description should be at least 3 characters long")
     private String description;
 
+    @NotNull(message = "Please provide value.")
     private double value;
 
+    @NotNull(message = "Date cannot be empty.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 

@@ -12,15 +12,16 @@
                 <form name="f" th:action="@{/categories/create}" th:object="${categoryForm}" method="post">
                     <div class="container">
                         <fieldset>
+                            <input type="hidden" th:field="*{id}"/>
                             <legend>Add entry</legend>
                             <div class="form-control">
                                 <label for="name">Description</label>
                                 <input type="text" id="name" name="name"
                                        placeholder="Give your entry a description" class="form-control"
                                        th:field="*{name}"/>
-                                <div class="alert alert-danger" th:errors="${categoryForm.name}">...</div>
-
+                                <div class="alert alert-danger" th:errors="*{name}">...</div>
                             </div>
+
                             <div class="form-control">
                                 <div class=" btn-group btn-group-lg">
                                     <button class="btn btn-primary active" type="submit">Save</button>

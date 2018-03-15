@@ -12,8 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/categories")
@@ -22,9 +25,14 @@ public class CategoryController
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private CategoryValidator categoryValidator;
-    @Autowired
     private UserService userService;
+
+    @RequestMapping(value="", method = RequestMethod.GET)
+    public String allCategories(Model model, Authentication authentication)
+    {
+        model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
+        return "categories";
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String categoryForm(Model model)
@@ -34,10 +42,8 @@ public class CategoryController
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String addCategory(@ModelAttribute("categoryForm") EntryCategory categoryForm, BindingResult bindingResult, Model model, Authentication authentication)
+    public String addCategory(@Valid @ModelAttribute("categoryForm") EntryCategory categoryForm, BindingResult bindingResult, Model model, Authentication authentication)
     {
-        categoryValidator.validate(categoryForm, bindingResult);
-
         if (bindingResult.hasErrors())
         {
             return "categoryform";
@@ -46,5 +52,22 @@ public class CategoryController
         categoryForm.setUser(userService.findByUsername(authentication.getName()));
         categoryRepository.save(categoryForm);
         return "redirect:/entries";
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public String deleteEntry(@PathVariable Long id, Authentication authentication)
+    {
+        EntryCategory category = categoryRepository.findOne(id);
+        if(category == null)
+        {
+            return "redirect:/accessDenied";
+        }
+        if(category.getUser().getUsername().equals(authentication.getName()))
+        {
+            categoryRepository.delete(id);
+            return "redirect:/entries";
+        }
+        else
+            return "redirect:/accessDenied";
     }
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+
+<body>
+
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+
+            <table th:if="${not #sets.isEmpty(categories)}" class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categories}">
+                    <td><a  th:text="${category.name}" th:href="@{entries/category/} + ${category.id}"></a></td>
+                    <td>
+                        <div class="btn-group">
+                            <form method="post" th:action="@{/categories/delete/} + ${category.id}">
+                                <button type="submit" class="btn btn-danger active">Delete</button>
+                            </form>
+                            <form method="get" th:action="@{/categories/edit/} + ${category.id}">
+                                <button type="submit" class="btn btn-primary active">Edit</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a class="btn btn-success active" href="/categories/create">Add Category</a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+
+
+</body>
+</html>

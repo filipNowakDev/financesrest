@@ -2,6 +2,7 @@ package com.filip.financesrest.services;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
+import com.filip.financesrest.repositories.CategoryRepository;
 import com.filip.financesrest.repositories.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,8 @@ public class EntryServiceImpl implements EntryService
     private EntryRepository entryRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public void save(FinanceEntry entry)
@@ -99,6 +102,18 @@ public class EntryServiceImpl implements EntryService
     {
         User user = userService.findByUsername(authentication.getName());
         List<FinanceEntry> entries = user.getEntries();
+        Double sum = new Double(0);
+        for(FinanceEntry entry : entries)
+        {
+            sum += entry.getValue();
+        }
+        return sum;
+    }
+
+    @Override
+    public Double getBalanceByCategory(Long categoryId)
+    {
+        List<FinanceEntry> entries = categoryRepository.findOne(categoryId).getEntries();
         Double sum = new Double(0);
         for(FinanceEntry entry : entries)
         {
