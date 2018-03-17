@@ -41,7 +41,7 @@
 
                             <div class="form-control">
                                 <label for="categoryId">Category (select one):</label>
-                                <select class="form-control" name="categoryId" id="categoryId">
+                                <select class="form-control" name="categoryId" id="categoryId" th:field="*{category}">
                                     <option th:each="category : ${categories}"
                                             th:value="${category.id}" th:text="${category.name}"
                                             th:selected="${entryForm.category != null and category.id == entryForm.category.id}">...</option>

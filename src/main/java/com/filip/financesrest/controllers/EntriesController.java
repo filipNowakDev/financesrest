@@ -89,7 +89,7 @@ public class EntriesController
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String addEntry(@Valid @ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
+    public String addEntry(@Valid @ModelAttribute("entryForm") FinanceEntry entryForm, BindingResult bindingResult, Model model, Authentication authentication)
     {
         if (bindingResult.hasErrors())
         {
@@ -98,7 +98,6 @@ public class EntriesController
         }
 
         entryForm.setUser(userService.findByUsername(authentication.getName()));
-        entryForm.setCategory(categoryRepository.findOne(categoryId));
         entryService.save(entryForm);
         return "redirect:/entries";
     }
@@ -122,30 +121,6 @@ public class EntriesController
             return "redirect:/accessDenied";
     }
 
-    /*@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editEntry(@PathVariable Long id, @Valid @ModelAttribute("entry") FinanceEntry entryForm, BindingResult bindingResult, @RequestParam long categoryId, Model model, Authentication authentication)
-    {
-        //entryValidator.validate(entryForm, bindingResult);
-
-        if (bindingResult.hasErrors())
-        {
-            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
-            return "entryform";
-        }
-
-
-        if(entryService.isOwner(authentication, id))
-        {
-            entryForm.setUser(userService.findByUsername(authentication.getName()));
-            entryForm.setId(id);
-            entryForm.setCategory(categoryRepository.findOne(categoryId));
-            entryService.save(entryForm);
-            return "redirect:/";
-        }
-        else
-            return "redirect:/accessDenied";
-
-    }*/
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteEntry(@PathVariable Long id, Authentication authentication)

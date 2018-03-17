@@ -15,7 +15,7 @@
                 <thead>
                 <tr>
                     <th>Description</th>
-                    <th>Category</th>
+                    <th>Category <a th:href="@{/entries}">All</a> </th>
                     <th>Date <a href="/entries/date/asc">&uarr;</a> <a href="/entries/date/desc">&darr;</a></th>
                     <th>Value <a href="/entries/value/asc">&uarr;</a> <a href="/entries/value/desc">&darr;</a></th>
                 </tr>
@@ -23,7 +23,7 @@
                 <tbody>
                 <tr th:each="entry : ${entries}">
                     <td th:text="${entry.description}"></td>
-                    <td th:text="${entry.category.name}"></td>
+                    <td><a  th:text="${entry.category.name}" th:href="@{/entries/category/} + ${entry.category.id}"></a> </td>
                     <td th:text="${entry.date}"></td>
                     <td th:text="${entry.value}"></td>
                     <td>

@@ -54,6 +54,23 @@ public class CategoryController
         return "redirect:/entries";
     }
 
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String categoryEditForm(@PathVariable Long id, Model model, Authentication authentication)
+    {
+        EntryCategory category = categoryRepository.findOne(id);
+        if(category == null)
+        {
+            return "redirect:/accessDenied";
+        }
+        if(category.getUser().getUsername().equals(authentication.getName()))
+        {
+            model.addAttribute("categoryForm", category);
+            return "categoryform";
+        }
+        else
+            return "redirect:/accessDenied";
+    }
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteEntry(@PathVariable Long id, Authentication authentication)
     {
