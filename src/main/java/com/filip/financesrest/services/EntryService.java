@@ -22,4 +22,6 @@ public interface EntryService
     List<FinanceEntry> findByUser_UsernameOrderByValueAsc(String username);
     List<FinanceEntry> findByUser_UsernameOrderByValueDesc(String username);
     List<FinanceEntry> findByUser_UsernameAndCategory_Id(String username, Long id);
+    List<FinanceEntry> getSortedBy(String field, String order, Authentication authentication);
+    List<FinanceEntry> getSortedBy(Long categoryId, String field, String order, Authentication authentication);
 }

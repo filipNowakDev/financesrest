@@ -34,7 +34,7 @@ public class DatabaseSeeder implements CommandLineRunner
     @Override
     public void run(String... strings) throws Exception
     {
-        //Role role1 = new Role();
+       /* //Role role1 = new Role();
         //role1.setName("USER");
         //Set<Role> roles1 = new HashSet<Role>();
         //roles1.add(role1);
@@ -73,6 +73,6 @@ public class DatabaseSeeder implements CommandLineRunner
         entries.add(new FinanceEntry("Received a monthly pay", 13000,LocalDate.of(2017, 9, 13), user1, category1));
         entries.add(new FinanceEntry("Received a spouse's monthly pay", 40000,LocalDate.of(2016, 5, 27), user2, category2));
         entries.add(new FinanceEntry("Bought food", 8500,LocalDate.of(2017, 12, 13), user2, category2));
-        entryRepository.save(entries);
+        entryRepository.save(entries);*/
     }
 }

@@ -1,10 +1,8 @@
 package com.filip.financesrest.controllers;
 
 
-import com.filip.financesrest.components.CategoryValidator;
 import com.filip.financesrest.models.EntryCategory;
-import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.repositories.CategoryRepository;
+import com.filip.financesrest.services.CategoryService;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,14 +21,13 @@ import javax.validation.Valid;
 public class CategoryController
 {
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Autowired
     private UserService userService;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String allCategories(Model model, Authentication authentication)
     {
-        model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
         return "categories";
     }
 
@@ -50,20 +47,17 @@ public class CategoryController
         }
 
         categoryForm.setUser(userService.findByUsername(authentication.getName()));
-        categoryRepository.save(categoryForm);
+        categoryService.save(categoryForm);
         return "redirect:/entries";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String categoryEditForm(@PathVariable Long id, Model model, Authentication authentication)
     {
-        EntryCategory category = categoryRepository.findOne(id);
-        if(category == null)
+
+        if(categoryService.exists(id) && categoryService.isOwner(authentication, id))
         {
-            return "redirect:/accessDenied";
-        }
-        if(category.getUser().getUsername().equals(authentication.getName()))
-        {
+            EntryCategory category = categoryService.findOne(id);
             model.addAttribute("categoryForm", category);
             return "categoryform";
         }
@@ -74,14 +68,14 @@ public class CategoryController
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteEntry(@PathVariable Long id, Authentication authentication)
     {
-        EntryCategory category = categoryRepository.findOne(id);
-        if(category == null)
+        EntryCategory category = categoryService.findOne(id);
+        if(category == null && !categoryService.isOwner(authentication, id))
         {
             return "redirect:/accessDenied";
         }
         if(category.getUser().getUsername().equals(authentication.getName()))
         {
-            categoryRepository.delete(id);
+            categoryService.delete(id);
             return "redirect:/entries";
         }
         else

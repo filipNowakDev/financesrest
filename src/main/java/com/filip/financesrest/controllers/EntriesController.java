@@ -1,9 +1,9 @@
 package com.filip.financesrest.controllers;
 
 
-import com.filip.financesrest.components.EntryValidator;
+import com.filip.financesrest.models.EntryCategory;
 import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.repositories.CategoryRepository;
+import com.filip.financesrest.services.CategoryService;
 import com.filip.financesrest.services.EntryService;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class EntriesController
     @Autowired
     private UserService userService;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
 
 
@@ -35,7 +35,20 @@ public class EntriesController
     {
         List<FinanceEntry> entries = entryService.findByUser_UsernameOrderByDateDesc(authentication.getName());
 
+        model.addAttribute("baseUrl", "/entries/");
+        model.addAttribute("entries", entries);
+        model.addAttribute("balance", entryService.getBalance(authentication));
+        return "index";
+    }
 
+
+
+    @RequestMapping(value = "/{sort}/{order}", method = RequestMethod.GET)
+    public String allEntries(@PathVariable String sort, @PathVariable String order, Model model, Authentication authentication)
+    {
+        List<FinanceEntry> entries = entryService.getSortedBy(sort, order, authentication);
+
+        model.addAttribute("baseUrl", "/entries/");
         model.addAttribute("entries", entries);
         model.addAttribute("balance", entryService.getBalance(authentication));
         return "index";
@@ -44,38 +57,31 @@ public class EntriesController
     @RequestMapping(value = "/category/{id}")
     public String entriesByCategory(@PathVariable Long id, Model model, Authentication authentication)
     {
-        model.addAttribute("entries", categoryRepository.findOne(id).getEntries());
-        model.addAttribute("balance", entryService.getBalanceByCategory(id));
-        return "index";
-    }
-
-    @RequestMapping(value = "/{sort}/{order}", method = RequestMethod.GET)
-    public String allEntries(@PathVariable String sort, @PathVariable String order, Model model, Authentication authentication)
-    {
-        List<FinanceEntry> entries;
-
-        if(sort.equals("date"))
+        if(categoryService.exists(id) && categoryService.isOwner(authentication, id))
         {
-            if(order.equals("desc"))
-                entries = entryService.findByUser_UsernameOrderByDateDesc(authentication.getName());
-            else
-                entries = entryService.findByUser_UsernameOrderByDateAsc(authentication.getName());
-        }
-
-        else if(sort.equals("value"))
-        {
-            if(order.equals("desc"))
-                entries = entryService.findByUser_UsernameOrderByValueDesc(authentication.getName());
-            else
-                entries = entryService.findByUser_UsernameOrderByValueAsc(authentication.getName());
+            model.addAttribute("baseUrl", "/entries/category/" + id + "/");
+            model.addAttribute("entries", categoryService.findOne(id).getEntries());
+            model.addAttribute("balance", entryService.getBalanceByCategory(id));
+            return "index";
         }
         else
-            entries = entryService.findByUser_UsernameOrderByDateAsc(authentication.getName());
+            return "redirect:/accessDenied";
+    }
 
-
-        model.addAttribute("entries", entries);
-        model.addAttribute("balance", entryService.getBalance(authentication));
-        return "index";
+    @RequestMapping(value = "/category/{id}/{sort}/{order}", method = RequestMethod.GET)
+    public String sortedEntriesByCategory(@PathVariable Long id, @PathVariable String sort,
+                                          @PathVariable String order, Model model, Authentication authentication)
+    {
+        if(categoryService.exists(id) && categoryService.isOwner(authentication, id))
+        {
+            List<FinanceEntry> entries = entryService.getSortedBy(id, sort, order, authentication);
+            model.addAttribute("baseUrl", "/entries/category/" + id + "/");
+            model.addAttribute("entries", entries);
+            model.addAttribute("balance", entryService.getBalance(authentication));
+            return "index";
+        }
+        else
+            return "redirect:/accessDenied";
     }
 
 
@@ -83,7 +89,7 @@ public class EntriesController
     public String entryForm(Model model, Authentication authentication)
     {
         model.addAttribute("entryForm", new FinanceEntry());
-        model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
+        model.addAttribute("categories", categoryService.findByUser_UsernameOrderByName(authentication.getName()));
         return "entryform";
     }
 
@@ -93,7 +99,7 @@ public class EntriesController
     {
         if (bindingResult.hasErrors())
         {
-            model.addAttribute("categories", categoryRepository.findByUser_Username(authentication.getName()));
+            model.addAttribute("categories", categoryService.findByUser_Username(authentication.getName()));
             return "entryform";
         }
 
@@ -114,7 +120,7 @@ public class EntriesController
         if(entryService.isOwner(authentication, id))
         {
             model.addAttribute("entryForm", entryForm);
-            model.addAttribute("categories", categoryRepository.findByUser_UsernameOrderByName(authentication.getName()));
+            model.addAttribute("categories", categoryService.findByUser_UsernameOrderByName(authentication.getName()));
             return "entryform";
         }
         else

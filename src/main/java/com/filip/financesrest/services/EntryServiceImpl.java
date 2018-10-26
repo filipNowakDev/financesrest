@@ -103,7 +103,7 @@ public class EntryServiceImpl implements EntryService
         User user = userService.findByUsername(authentication.getName());
         List<FinanceEntry> entries = user.getEntries();
         Double sum = new Double(0);
-        for(FinanceEntry entry : entries)
+        for (FinanceEntry entry : entries)
         {
             sum += entry.getValue();
         }
@@ -115,10 +115,54 @@ public class EntryServiceImpl implements EntryService
     {
         List<FinanceEntry> entries = categoryRepository.findOne(categoryId).getEntries();
         Double sum = new Double(0);
-        for(FinanceEntry entry : entries)
+        for (FinanceEntry entry : entries)
         {
             sum += entry.getValue();
         }
         return sum;
+    }
+
+    @Override
+    public List<FinanceEntry> getSortedBy(String field, String order, Authentication authentication)
+    {
+        List<FinanceEntry> entries;
+
+        if (field.equals("date"))
+        {
+            if (order.equals("desc"))
+                entries = entryRepository.findByUser_UsernameOrderByDateDesc(authentication.getName());
+            else
+                entries = entryRepository.findByUser_UsernameOrderByDateAsc(authentication.getName());
+        } else if (field.equals("value"))
+        {
+            if (order.equals("desc"))
+                entries = entryRepository.findByUser_UsernameOrderByValueDesc(authentication.getName());
+            else
+                entries = entryRepository.findByUser_UsernameOrderByValueAsc(authentication.getName());
+        } else
+            entries = entryRepository.findByUser_UsernameOrderByDateAsc(authentication.getName());
+        return entries;
+    }
+
+    @Override
+    public List<FinanceEntry> getSortedBy(Long categoryId, String field, String order, Authentication authentication)
+    {
+        List<FinanceEntry> entries;
+        if (field.equals("date"))
+        {
+            if (order.equals("desc"))
+                entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateDesc(authentication.getName(), categoryId);
+            else
+                entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
+        } else if (field.equals("value"))
+        {
+            if (order.equals("desc"))
+                entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
+            else
+                entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByValueDesc(authentication.getName(), categoryId);
+        } else
+            entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateDesc(authentication.getName(), categoryId);
+        return entries;
+
     }
 }

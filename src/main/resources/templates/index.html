@@ -16,8 +16,8 @@
                 <tr>
                     <th>Description</th>
                     <th>Category <a th:href="@{/entries}">All</a> </th>
-                    <th>Date <a href="/entries/date/asc">&uarr;</a> <a href="/entries/date/desc">&darr;</a></th>
-                    <th>Value <a href="/entries/value/asc">&uarr;</a> <a href="/entries/value/desc">&darr;</a></th>
+                    <th>Date <a th:href="${baseUrl} + @{date/asc}">&uarr;</a> <a th:href="${baseUrl} + @{date/desc}">&darr;</a></th>
+                    <th>Value <a th:href="${baseUrl} + @{value/asc}">&uarr;</a> <a th:href="${baseUrl} + @{value/desc}">&darr;</a></th>
                 </tr>
                 </thead>
                 <tbody>

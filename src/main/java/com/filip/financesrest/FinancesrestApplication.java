@@ -8,13 +8,14 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 public class FinancesrestApplication extends SpringBootServletInitializer
 {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(FinancesrestApplication.class);
-    }
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
+	{
+		return application.sources(FinancesrestApplication.class);
+	}
 
-    public static void main(String[] args)
-    {
-        SpringApplication.run(FinancesrestApplication.class, args);
-    }
+	public static void main(String[] args)
+	{
+		SpringApplication.run(FinancesrestApplication.class, args);
+	}
 }

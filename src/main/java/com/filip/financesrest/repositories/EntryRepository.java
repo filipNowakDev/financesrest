@@ -15,4 +15,10 @@ public interface EntryRepository extends JpaRepository<FinanceEntry, Long> {
     List<FinanceEntry> findByUser_UsernameOrderByValueDesc(String username);
 
     List<FinanceEntry> findByUser_UsernameAndCategory_Id(String username, Long id);
+
+    List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByDateAsc(String username, Long id);
+    List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByDateDesc(String username, Long id);
+    List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByValueAsc(String username, Long id);
+    List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByValueDesc(String username, Long id);
+
 }
