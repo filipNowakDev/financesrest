@@ -1,14 +1,25 @@
-var data = {
-    // A labels array that can contain any sort of values
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-    // Our series array that contains series objects or in this case series data arrays
-    series: [
-        [5, 2, -4, 2, 0]
-    ]
+var option = $('#dateSelect').find('option:selected');
+var date = option.val().split('-');
+
+
+var options = {
+    width: '100%',
+    height: '400px'
 };
 
+chart = new Chartist.Bar('.ct-chart', options);
 
-var chart = new Chartist.Bar('.ct-chart', data);
+var getData = $.get('/api/analysis/chart/date/' + date[1] + '/' + date[0]);
+getData.done(function (data) {
+    data.series = [data.series];
+    chart.update(data);
+});
+
+
+
+
+
+
 var red = '#ff0000';
 var blue = '#0000ff';
 
@@ -25,4 +36,18 @@ chart.on('draw', function (context) {
             });
         }
     }
+});
+
+$('#dateSelect').change(function () {
+
+
+    var option = $(this).find('option:selected');
+    var date = option.val().split('-');
+    var getData = $.get('/api/analysis/chart/date/' + date[1] + '/' + date[0]);
+
+    getData.done(function (data) {
+        data.series = [data.series];
+        chart.update(data);
+    });
+
 });

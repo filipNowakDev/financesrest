@@ -11,6 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
+
 @Controller
 @RequestMapping("/analysis")
 public class AnalysisController
@@ -26,6 +31,14 @@ public class AnalysisController
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewCharts(Model model, Authentication authentication)
 	{
+		List<LocalDate> dates = entryService.getDistinctMonthsAndYears();
+		for (LocalDate date : dates)
+		{
+			System.out.print("[DEBUG] Dates info| " +date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " | " + date.getYear() + " |\n");
+		}
+		model.addAttribute("dates", dates);
+		model.addAttribute("style", TextStyle.FULL);
+		model.addAttribute("locale", Locale.getDefault());
 		return "chart";
 	}
 }

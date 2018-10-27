@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head th:replace="partial/header :: header"/>
 
@@ -9,6 +9,28 @@
 
 <div class="row">
     <div class="container">
+        <div class="jumbotron">
+            <div class="form-group">
+                <form name="f" >
+                    <div class="container">
+                        <fieldset>
+                            <legend>Select date</legend>
+                            <div class="form-control">
+                                <label for="dateSelect">Category (select one):</label>
+                                <select class="form-control" name="dateSelect" id="dateSelect">
+                                    <option th:each="date : ${dates}"
+                                            th:value="${date}"
+                                            th:text="${date.getMonth().getDisplayName(style, locale) + ' | ' + date.getYear()}">
+                                        ...
+                                    </option>
+                                </select>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="jumbotron">
             <div class="ct-chart ct-perfect-fourth"></div>
         </div>
