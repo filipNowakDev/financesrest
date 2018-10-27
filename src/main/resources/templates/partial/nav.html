@@ -17,17 +17,23 @@
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link" href="/logout">Logout <span sec:authentication="principal.username"></span></a>
             </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/entries">Entries</a>
+            </li>
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Categories
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/categories">View All</a>
+                    <a class="dropdown-item" href="/categories">Edit</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:each="category : ${categories}"
                        th:href="@{/entries/category/} + ${category.id}"
                        th:text="${category.name}">...</a>
                 </div>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/analysis">Analysis</a>
             </li>
 
             <li class="nav-item">

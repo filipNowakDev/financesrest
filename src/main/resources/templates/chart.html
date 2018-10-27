@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="partial/header :: header"/>
+
+<body>
+
+<nav th:replace="partial/nav :: navbar"/>
+
+<div class="row">
+    <div class="container">
+        <div class="jumbotron">
+            <div class="ct-chart ct-perfect-fourth"></div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="partial/footer :: scripts"/>
+<script src="/static/js/chart.js" th:src="@{/resources/js/chart.js}"></script>
+
+</body>
+</html>

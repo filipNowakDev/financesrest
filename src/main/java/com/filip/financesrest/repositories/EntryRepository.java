@@ -21,4 +21,8 @@ public interface EntryRepository extends JpaRepository<FinanceEntry, Long> {
     List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByValueAsc(String username, Long id);
     List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByValueDesc(String username, Long id);
 
+    //TODO implement this query
+    //select distinct MONTH(finance_entry.date) from finance_entry;
+
+
 }
