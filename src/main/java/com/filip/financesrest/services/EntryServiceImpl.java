@@ -169,9 +169,9 @@ public class EntryServiceImpl implements EntryService
 	}
 
 	@Override
-	public List<LocalDate> getDistinctMonthsAndYears()
+	public List<LocalDate> getDistinctMonthsAndYears(String username)
 	{
-		List<ILocalDateProjection> datesList = entryRepository.selectDistinctEntryMonths();
+		List<ILocalDateProjection> datesList = entryRepository.selectDistinctEntryMonths(username);
 		List<LocalDate> list = new ArrayList<>();
 		for (ILocalDateProjection dateProj: datesList)
 		{
@@ -182,9 +182,10 @@ public class EntryServiceImpl implements EntryService
 	}
 
 	@Override
-	public Integer getBalanceForMonthAndCategory(long categoryId, int month, int year)
+	public Integer getBalanceForMonthAndCategory(long categoryId, int month, int year, String username)
 	{
-		Integer balance = entryRepository.selectBalanceByMonth(categoryId, month, year);
+
+		Integer balance = entryRepository.selectBalanceByMonth(categoryId, month, year, username);
 		if (balance != null)
 			return balance;
 		else

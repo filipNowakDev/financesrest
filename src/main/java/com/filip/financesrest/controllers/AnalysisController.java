@@ -31,7 +31,7 @@ public class AnalysisController
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewCharts(Model model, Authentication authentication)
 	{
-		List<LocalDate> dates = entryService.getDistinctMonthsAndYears();
+		List<LocalDate> dates = entryService.getDistinctMonthsAndYears(authentication.getName());
 		for (LocalDate date : dates)
 		{
 			System.out.print("[DEBUG] Dates info| " +date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " | " + date.getYear() + " |\n");

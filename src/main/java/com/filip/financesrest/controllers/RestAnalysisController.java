@@ -35,7 +35,7 @@ public class RestAnalysisController
 			for (EntryCategory category : categories)
 			{
 				chartData.getLabels().add(category.getName());
-				chartData.getSeries().add(entryService.getBalanceForMonthAndCategory(category.getId(), month, year));
+				chartData.getSeries().add(entryService.getBalanceForMonthAndCategory(category.getId(), month, year, authentication.getName()));
 			}
 		}
 		return chartData;
