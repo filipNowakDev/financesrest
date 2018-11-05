@@ -29,8 +29,18 @@ public class EntryCategory
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<FinanceEntry> entries;
 
+	public EntryCategory()
+	{
+	}
 
-    public long getId()
+	public EntryCategory(String name, User user, List<FinanceEntry> entries)
+	{
+		this.name = name;
+		this.user = user;
+		this.entries = entries;
+	}
+
+	public long getId()
     {
         return id;
     }

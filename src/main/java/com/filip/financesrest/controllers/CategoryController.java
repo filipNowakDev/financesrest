@@ -20,10 +20,15 @@ import javax.validation.Valid;
 @RequestMapping("/categories")
 public class CategoryController
 {
-    @Autowired
     private CategoryService categoryService;
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public CategoryController(CategoryService categoryService, UserService userService)
+    {
+        this.categoryService = categoryService;
+        this.userService = userService;
+    }
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String allCategories(Model model, Authentication authentication)

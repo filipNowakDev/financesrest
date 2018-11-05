@@ -16,10 +16,15 @@ import java.util.List;
 public class RestEntriesController
 {
 
-    @Autowired
     private EntryRepository entryRepository;
+    private UserService userService;
+
     @Autowired
-    UserService userService;
+    public RestEntriesController(EntryRepository entryRepository, UserService userService)
+    {
+        this.entryRepository = entryRepository;
+        this.userService = userService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<FinanceEntry> getAll(Authentication authentication)

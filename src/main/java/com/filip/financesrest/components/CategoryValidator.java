@@ -21,7 +21,7 @@ public class CategoryValidator implements Validator
     @Override
     public void validate(Object o, Errors errors)
     {
-        EntryCategory category = (EntryCategory) o;
+        //EntryCategory category = (EntryCategory) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
     }

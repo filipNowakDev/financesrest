@@ -3,8 +3,8 @@ package com.filip.financesrest.controllers;
 
 import com.filip.financesrest.models.ChartData;
 import com.filip.financesrest.models.EntryCategory;
+import com.filip.financesrest.services.AnalysisService;
 import com.filip.financesrest.services.CategoryService;
-import com.filip.financesrest.services.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +18,15 @@ import java.util.List;
 @RequestMapping("api/analysis")
 public class RestAnalysisController
 {
-	@Autowired
 	private CategoryService categoryService;
+	private AnalysisService analysisService;
+
 	@Autowired
-	private EntryService entryService;
+	public RestAnalysisController(CategoryService categoryService, AnalysisService analysisService)
+	{
+		this.categoryService = categoryService;
+		this.analysisService = analysisService;
+	}
 
 	@RequestMapping("/chart/date/{month}/{year}")
 	public ChartData getDataInMonth(@PathVariable int month, @PathVariable int year)
@@ -35,7 +40,7 @@ public class RestAnalysisController
 			for (EntryCategory category : categories)
 			{
 				chartData.getLabels().add(category.getName());
-				chartData.getSeries().add(entryService.getBalanceForMonthAndCategory(category.getId(), month, year, authentication.getName()));
+				chartData.getSeries().add(analysisService.getBalanceForMonthAndCategoryForUser(category.getId(), month, year, authentication.getName()));
 			}
 		}
 		return chartData;

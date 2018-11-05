@@ -3,7 +3,6 @@ package com.filip.financesrest.controllers;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.User;
-import com.filip.financesrest.repositories.EntryRepository;
 import com.filip.financesrest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,27 +18,32 @@ import java.util.Set;
 @RequestMapping("api/balance")
 public class RestBalanceController
 {
-    @Autowired
-    private EntryRepository entryRepository;
-    @Autowired
-    UserService userService;
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Set<FinanceEntry> getBalance(Authentication authentication)
-    {
-        User currentUser = userService.findByUsername(authentication.getName());
+	private UserService userService;
 
-        List<FinanceEntry> entries = currentUser.getEntries();
-        double sum = 0;
+	@Autowired
+	public RestBalanceController(UserService userService)
+	{
+		this.userService = userService;
+	}
 
-        for (FinanceEntry entry : entries)
-        {
-            sum += entry.getValue();
-        }
-        FinanceEntry result = new FinanceEntry("Balance", sum, null, currentUser, null);
-        Set<FinanceEntry> reslist = new HashSet<>();
-        reslist.add(result);
-        return reslist;
-    }
+
+	@RequestMapping(method = RequestMethod.GET)
+	public Set<FinanceEntry> getBalance(Authentication authentication)
+	{
+		User currentUser = userService.findByUsername(authentication.getName());
+
+		List<FinanceEntry> entries = currentUser.getEntries();
+		double sum = 0;
+
+		for (FinanceEntry entry : entries)
+		{
+			sum += entry.getValue();
+		}
+		FinanceEntry result = new FinanceEntry("Balance", sum, null, currentUser, null);
+		Set<FinanceEntry> reslist = new HashSet<>();
+		reslist.add(result);
+		return reslist;
+	}
 }

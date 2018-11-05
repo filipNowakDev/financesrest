@@ -41,7 +41,4 @@ public interface EntryService
 
 	List<FinanceEntry> getSortedBy(Long categoryId, String field, String order, Authentication authentication);
 
-	List<LocalDate> getDistinctMonthsAndYears(String username);
-
-	Integer getBalanceForMonthAndCategory(long categoryId, int month, int year, String username);
 }

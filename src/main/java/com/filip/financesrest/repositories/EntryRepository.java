@@ -3,6 +3,7 @@ package com.filip.financesrest.repositories;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.ILocalDateProjection;
+import com.filip.financesrest.models.LocalDateProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -30,10 +31,7 @@ public interface EntryRepository extends JpaRepository<FinanceEntry, Long>
 
 	List<FinanceEntry> findByUser_UsernameAndCategory_IdOrderByValueDesc(String username, Long id);
 
-	//TODO implement this query
-	//select distinct month(finance_entry.date), year(finance_entry.date)  from finance_entry order by date;
-
-	@Query(value = " SELECT DISTINCT MONTH(finance_entry.date), YEAR(finance_entry.date) " +
+	@Query(value = " SELECT DISTINCT MONTH(finance_entry.date) AS month, YEAR(finance_entry.date) AS year " +
 			"FROM finance_entry JOIN user " +
 			"ON user.id = finance_entry.user_id " +
 			"WHERE user.username = ?1 ORDER BY date DESC", nativeQuery = true)

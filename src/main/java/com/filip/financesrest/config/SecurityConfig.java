@@ -17,40 +17,45 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
+	@Autowired
+	public SecurityConfig(UserDetailsService userDetailsService)
+	{
+		this.userDetailsService = userDetailsService;
+	}
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception
-    {
-        http.authorizeRequests()
-                    .antMatchers("/resources/**").permitAll()
-                    .antMatchers("/registration", "/login").anonymous()
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-                .loginPage("/login")
-                    .permitAll()
-                .and()
-                    .httpBasic()
-                .and()
-                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
-                    .permitAll()
-                .and()
-                    .exceptionHandling().accessDeniedPage("/accessDenied");
-        ;
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder()
+	{
+		return new BCryptPasswordEncoder();
+	}
 
-    }
+	@Override
+	public void configure(HttpSecurity http) throws Exception
+	{
+		http.authorizeRequests()
+				.antMatchers("/resources/**").permitAll()
+				.antMatchers("/registration", "/login").anonymous()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.and()
+				.httpBasic()
+				.and()
+				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+				.permitAll()
+				.and()
+				.exceptionHandling().accessDeniedPage("/accessDenied");
+		;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
-    {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
+	}
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
+	{
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	}
 }

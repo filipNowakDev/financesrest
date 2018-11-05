@@ -1,7 +1,6 @@
 package com.filip.financesrest.services;
 
 import com.filip.financesrest.models.FinanceEntry;
-import com.filip.financesrest.models.ILocalDateProjection;
 import com.filip.financesrest.models.User;
 import com.filip.financesrest.repositories.CategoryRepository;
 import com.filip.financesrest.repositories.EntryRepository;
@@ -9,14 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EntryServiceImpl implements EntryService
 {
-	private  EntryRepository entryRepository;
+	private EntryRepository entryRepository;
 	private UserService userService;
 	private CategoryRepository categoryRepository;
 
@@ -110,7 +107,7 @@ public class EntryServiceImpl implements EntryService
 	{
 		User user = userService.findByUsername(authentication.getName());
 		List<FinanceEntry> entries = user.getEntries();
-		Double sum = new Double(0);
+		double sum = (double) 0;
 		for (FinanceEntry entry : entries)
 		{
 			sum += entry.getValue();
@@ -122,7 +119,7 @@ public class EntryServiceImpl implements EntryService
 	public Double getBalanceByCategory(Long categoryId)
 	{
 		List<FinanceEntry> entries = categoryRepository.findOne(categoryId).getEntries();
-		Double sum = new Double(0);
+		double sum = (double) 0;
 		for (FinanceEntry entry : entries)
 		{
 			sum += entry.getValue();
@@ -135,20 +132,24 @@ public class EntryServiceImpl implements EntryService
 	{
 		List<FinanceEntry> entries;
 
-		if (field.equals("date"))
+		switch (field)
 		{
-			if (order.equals("desc"))
-				entries = entryRepository.findByUser_UsernameOrderByDateDesc(authentication.getName());
-			else
+			case "date":
+				if (order.equals("desc"))
+					entries = entryRepository.findByUser_UsernameOrderByDateDesc(authentication.getName());
+				else
+					entries = entryRepository.findByUser_UsernameOrderByDateAsc(authentication.getName());
+				break;
+			case "value":
+				if (order.equals("desc"))
+					entries = entryRepository.findByUser_UsernameOrderByValueDesc(authentication.getName());
+				else
+					entries = entryRepository.findByUser_UsernameOrderByValueAsc(authentication.getName());
+				break;
+			default:
 				entries = entryRepository.findByUser_UsernameOrderByDateAsc(authentication.getName());
-		} else if (field.equals("value"))
-		{
-			if (order.equals("desc"))
-				entries = entryRepository.findByUser_UsernameOrderByValueDesc(authentication.getName());
-			else
-				entries = entryRepository.findByUser_UsernameOrderByValueAsc(authentication.getName());
-		} else
-			entries = entryRepository.findByUser_UsernameOrderByDateAsc(authentication.getName());
+				break;
+		}
 		return entries;
 	}
 
@@ -156,44 +157,24 @@ public class EntryServiceImpl implements EntryService
 	public List<FinanceEntry> getSortedBy(Long categoryId, String field, String order, Authentication authentication)
 	{
 		List<FinanceEntry> entries;
-		if (field.equals("date"))
+		switch (field)
 		{
-			if (order.equals("desc"))
+			case "date":
+				if (order.equals("desc"))
+					entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateDesc(authentication.getName(), categoryId);
+				else
+					entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
+				break;
+			case "value":
+				if (order.equals("desc"))
+					entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
+				else
+					entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByValueDesc(authentication.getName(), categoryId);
+				break;
+			default:
 				entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateDesc(authentication.getName(), categoryId);
-			else
-				entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
-		} else if (field.equals("value"))
-		{
-			if (order.equals("desc"))
-				entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateAsc(authentication.getName(), categoryId);
-			else
-				entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByValueDesc(authentication.getName(), categoryId);
-		} else
-			entries = entryRepository.findByUser_UsernameAndCategory_IdOrderByDateDesc(authentication.getName(), categoryId);
-		return entries;
-	}
-
-	@Override
-	public List<LocalDate> getDistinctMonthsAndYears(String username)
-	{
-		List<ILocalDateProjection> datesList = entryRepository.selectDistinctEntryMonths(username);
-		List<LocalDate> list = new ArrayList<>();
-		for (ILocalDateProjection dateProj: datesList)
-		{
-			list.add(LocalDate.of(dateProj.getYear(), dateProj.getMonth().getValue() - 1, 1));
+				break;
 		}
-		return list;
-
-	}
-
-	@Override
-	public Integer getBalanceForMonthAndCategory(long categoryId, int month, int year, String username)
-	{
-
-		Integer balance = entryRepository.selectBalanceByMonth(categoryId, month, year, username);
-		if (balance != null)
-			return balance;
-		else
-			return 0;
+		return entries;
 	}
 }

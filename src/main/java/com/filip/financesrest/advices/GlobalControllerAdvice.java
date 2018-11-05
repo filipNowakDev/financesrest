@@ -15,8 +15,13 @@ import java.util.List;
 public class GlobalControllerAdvice
 {
 
+	private CategoryRepository categoryRepository;
+
 	@Autowired
-	CategoryRepository categoryRepository;
+	public GlobalControllerAdvice(CategoryRepository categoryRepository)
+	{
+		this.categoryRepository = categoryRepository;
+	}
 
 
 	@ModelAttribute("categories")
@@ -29,7 +34,7 @@ public class GlobalControllerAdvice
 			if (categories != null)
 				return categories;
 		}
-		return new ArrayList<EntryCategory>();
+		return new ArrayList<>();
 
 	}
 }

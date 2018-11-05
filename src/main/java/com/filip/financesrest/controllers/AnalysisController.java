@@ -1,9 +1,7 @@
 package com.filip.financesrest.controllers;
 
 
-import com.filip.financesrest.services.CategoryService;
-import com.filip.financesrest.services.EntryService;
-import com.filip.financesrest.services.UserService;
+import com.filip.financesrest.services.AnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -21,20 +19,22 @@ import java.util.Locale;
 public class AnalysisController
 {
 
+	private AnalysisService analysisService;
+
 	@Autowired
-	private EntryService entryService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private CategoryService categoryService;
+	public AnalysisController(AnalysisService analysisService)
+	{
+		this.analysisService = analysisService;
+	}
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewCharts(Model model, Authentication authentication)
 	{
-		List<LocalDate> dates = entryService.getDistinctMonthsAndYears(authentication.getName());
+		List<LocalDate> dates = analysisService.getDistinctMonthsAndYearsForUser(authentication.getName());
 		for (LocalDate date : dates)
 		{
-			System.out.print("[DEBUG] Dates info| " +date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " | " + date.getYear() + " |\n");
+			System.out.print("[DEBUG] Dates info| " + date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " = " + date.getMonth().getValue() + " | " + date.getYear() + " |\n");
 		}
 		model.addAttribute("dates", dates);
 		model.addAttribute("style", TextStyle.FULL);

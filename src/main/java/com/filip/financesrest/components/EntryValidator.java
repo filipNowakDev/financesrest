@@ -18,7 +18,7 @@ public class EntryValidator implements Validator
     @Override
     public void validate(Object o, Errors errors)
     {
-        FinanceEntry entry = (FinanceEntry) o;
+        //FinanceEntry entry = (FinanceEntry) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
 

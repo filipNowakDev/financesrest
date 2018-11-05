@@ -23,12 +23,17 @@ import java.util.List;
 public class EntriesController
 {
 
-	@Autowired
 	private EntryService entryService;
-	@Autowired
 	private UserService userService;
-	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	public EntriesController(EntryService entryService, UserService userService, CategoryService categoryService)
+	{
+		this.entryService = entryService;
+		this.userService = userService;
+		this.categoryService = categoryService;
+	}
 
 
 	@RequestMapping(method = RequestMethod.GET)

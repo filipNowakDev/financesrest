@@ -16,38 +16,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class UserController
 {
-    @Autowired
-    private UserService userService;
+	private UserService userService;
 
-    @Autowired
-    private SecurityService securityService;
+	private SecurityService securityService;
 
-    @Autowired
-    private UserValidator userValidator;
+	private UserValidator userValidator;
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Model model)
-    {
-        model.addAttribute("userForm", new User());
+	@Autowired
+	public UserController(UserService userService, SecurityService securityService, UserValidator userValidator)
+	{
+		this.userService = userService;
+		this.securityService = securityService;
+		this.userValidator = userValidator;
+	}
 
-        return "registration";
-    }
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public String registration(Model model)
+	{
+		model.addAttribute("userForm", new User());
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model)
-    {
-        userValidator.validate(userForm, bindingResult);
+		return "registration";
+	}
 
-        if (bindingResult.hasErrors())
-        {
-            return "registration";
-        }
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model)
+	{
+		userValidator.validate(userForm, bindingResult);
 
-        userService.save(userForm);
+		if (bindingResult.hasErrors())
+		{
+			return "registration";
+		}
 
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+		userService.save(userForm);
 
-        return "redirect:/";
-    }
+		securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+
+		return "redirect:/";
+	}
 
 }
