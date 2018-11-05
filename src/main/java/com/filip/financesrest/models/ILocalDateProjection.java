@@ -5,6 +5,6 @@ import java.time.Month;
 
 public interface ILocalDateProjection
 {
-	public Month getMonth();
-	public int getYear();
+	Month getMonth();
+	int getYear();
 }

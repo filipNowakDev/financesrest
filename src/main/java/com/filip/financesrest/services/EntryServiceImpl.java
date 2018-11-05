@@ -16,12 +16,17 @@ import java.util.List;
 @Service
 public class EntryServiceImpl implements EntryService
 {
-	@Autowired
-	private EntryRepository entryRepository;
-	@Autowired
+	private  EntryRepository entryRepository;
 	private UserService userService;
-	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	public EntryServiceImpl(EntryRepository entryRepository, UserService userService, CategoryRepository categoryRepository)
+	{
+		this.entryRepository = entryRepository;
+		this.userService = userService;
+		this.categoryRepository = categoryRepository;
+	}
 
 	@Override
 	public void save(FinanceEntry entry)
