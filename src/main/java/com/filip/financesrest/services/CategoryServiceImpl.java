@@ -11,61 +11,62 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService
 {
-    private CategoryRepository categoryRepository;
+	private CategoryRepository categoryRepository;
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository)
-    {
-        this.categoryRepository = categoryRepository;
-    }
+	@Autowired
+	public CategoryServiceImpl(CategoryRepository categoryRepository)
+	{
+		this.categoryRepository = categoryRepository;
+	}
 
-    @Override
-    public void save(EntryCategory category)
-    {
-        categoryRepository.save(category);
-    }
+	@Override
+	public void save(EntryCategory category)
+	{
+		categoryRepository.save(category);
+	}
 
-    @Override
-    public void delete(Long id)
-    {
-        categoryRepository.delete(id);
-    }
+	@Override
+	public void delete(Long id)
+	{
+		categoryRepository.delete(id);
+	}
 
-    @Override
-    public EntryCategory findOne(Long id)
-    {
-        return categoryRepository.findOne(id);
-    }
+	@Override
+	public EntryCategory findOne(Long id)
+	{
+		return categoryRepository.findOne(id);
+	}
 
-    @Override
-    public List<EntryCategory> findAll()
-    {
-        return categoryRepository.findAll();
-    }
+	@Override
+	public List<EntryCategory> findAll()
+	{
+		return categoryRepository.findAll();
+	}
 
-    @Override
-    public List<EntryCategory> findByUser_Username(String username)
-    {
-        return categoryRepository.findByUser_Username(username);
-    }
+	@Override
+	public List<EntryCategory> findByUser_Username(String username)
+	{
+		return categoryRepository.findByUser_Username(username);
+	}
 
-    @Override
-    public List<EntryCategory> findByUser_UsernameOrderByName(String username)
-    {
-        return categoryRepository.findByUser_UsernameOrderByName(username);
-    }
+	@Override
+	public List<EntryCategory> findByUser_UsernameOrderByName(String username)
+	{
+		return categoryRepository.findByUser_UsernameOrderByName(username);
+	}
 
-    @Override
-    public boolean isOwner(Authentication authentication, Long id)
-    {
-        EntryCategory category = categoryRepository.findOne(id);
-        return category.getUser().getUsername().equals(authentication.getName());
-    }
+	@Override
+	public boolean isOwner(Authentication authentication, Long id)
+	{
+		EntryCategory category = categoryRepository.findOne(id);
 
-    @Override
-    public boolean exists(Long id)
-    {
-        EntryCategory category = categoryRepository.findOne(id);
-        return category != null;
-    }
+		return category != null && category.getUser().getUsername().equals(authentication.getName());
+	}
+
+	@Override
+	public boolean exists(Long id)
+	{
+		EntryCategory category = categoryRepository.findOne(id);
+		return category != null;
+	}
 }

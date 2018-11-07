@@ -1,45 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="partial/header :: header"/>
+<head th:replace="partial/header :: header">
+</head>
+
+
 
 <body>
 
-<nav th:replace="partial/nav :: navbar"/>
+<nav th:replace="partial/nav :: navbar"></nav>
 
 <div class="row">
     <div class="container">
         <div class="jumbotron">
 
-            <table th:if="${not #sets.isEmpty(entries)}" class="table">
-                <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Category <a th:href="@{/entries}">All</a> </th>
-                    <th>Date <a th:href="${baseUrl} + @{date/asc}">&uarr;</a> <a th:href="${baseUrl} + @{date/desc}">&darr;</a></th>
-                    <th>Value <a th:href="${baseUrl} + @{value/asc}">&uarr;</a> <a th:href="${baseUrl} + @{value/desc}">&darr;</a></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="entry : ${entries}">
-                    <td th:text="${entry.description}"></td>
-                    <td><a  th:text="${entry.category.name}" th:href="@{/entries/category/} + ${entry.category.id}"></a> </td>
-                    <td th:text="${entry.date}"></td>
-                    <td th:text="${entry.value}"></td>
-                    <td>
-                        <div class="btn-group">
-                            <form method="post" th:action="@{/entries/delete/} + ${entry.id}">
-                                <button type="submit" class="btn btn-danger active">Delete</button>
-                            </form>
-                            <form method="get" th:action="@{/entries/edit/} + ${entry.id}">
-                                <button type="submit" class="btn btn-primary active">Edit</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="entryTable" th:if="${not #sets.isEmpty(entries)}"
+                               class="table table-striped table-bordered text-center">
 
+                            <thead>
+                            <tr>
+                                <th data-priority="1">Description</th>
+                                <th data-priority="2">Category</th>
+                                <th data-priority="1">Date</th>
+                                <th data-priority="2">Value</th>
+                                <th data-priority="3">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <!--<thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Category <a th:href="@{/entries}">All</a> </th>
+                                <th>Date <a th:href="${baseUrl} + @{date/asc}">&uarr;</a> <a th:href="${baseUrl} + @{date/desc}">&darr;</a></th>
+                                <th>Value <a th:href="${baseUrl} + @{value/asc}">&uarr;</a> <a th:href="${baseUrl} + @{value/desc}">&darr;</a></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entry : ${entries}">
+                                <td th:text="${entry.description}"></td>
+                                <td><a  th:text="${entry.category.name}" th:href="@{/entries/category/} + ${entry.category.id}"></a> </td>
+                                <td th:text="${entry.date}"></td>
+                                <td th:text="${entry.value}"></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <form method="post" th:action="@{/entries/delete/} + ${entry.id}">
+                                            <button type="submit" class="btn btn-danger active">Delete</button>
+                                        </form>
+                                        <form method="get" th:action="@{/entries/edit/} + ${entry.id}">
+                                            <button type="submit" class="btn btn-primary active">Edit</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>-->
+                        </table>
+                    </div>
+                </div>
+            </div>
             <a class="btn btn-primary active" href="/entries/create">Add Entry</a>
             <a class="btn btn-success active" href="/categories/create">Add Category</a>
 
@@ -51,8 +71,16 @@
     </div>
 
 </div>
+<script th:inline="javascript">
 
-<div th:replace="partial/footer :: scripts"/>
+    /*<![CDATA[*/
+
+    var entry_datasource = /*[[${dataSource}]]*/ 'data source';
+
+    /*]]>*/
+</script>
+<div th:replace="partial/footer :: scripts"></div>
+<script src="/resources/js/entry_datatable.js"></script>
 
 
 </body>

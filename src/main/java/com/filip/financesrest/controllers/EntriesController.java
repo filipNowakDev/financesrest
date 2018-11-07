@@ -44,6 +44,7 @@ public class EntriesController
 		model.addAttribute("baseUrl", "/entries/");
 		model.addAttribute("entries", entries);
 		model.addAttribute("balance", entryService.getBalance(authentication));
+		model.addAttribute("dataSource", "/api/entries");
 		return "index";
 	}
 
@@ -67,6 +68,7 @@ public class EntriesController
 			model.addAttribute("baseUrl", "/entries/category/" + id + "/");
 			model.addAttribute("entries", categoryService.findOne(id).getEntries());
 			model.addAttribute("balance", entryService.getBalanceByCategory(id));
+			model.addAttribute("dataSource", "/api/entries/category/" + id);
 			return "index";
 		} else
 			return "redirect:/accessDenied";

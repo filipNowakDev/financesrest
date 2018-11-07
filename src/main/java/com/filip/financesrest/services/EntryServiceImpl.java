@@ -61,7 +61,7 @@ public class EntryServiceImpl implements EntryService
 	public Boolean isOwner(User user, Long id)
 	{
 		FinanceEntry entry = entryRepository.findOne(id);
-		return entry.getUser().getUsername().equals(user.getUsername());
+		return entry != null && entry.getUser().getUsername().equals(user.getUsername());
 
 	}
 
@@ -69,7 +69,7 @@ public class EntryServiceImpl implements EntryService
 	public Boolean isOwner(Authentication authentication, Long id)
 	{
 		FinanceEntry entry = entryRepository.findOne(id);
-		return authentication.getName().equals(entry.getUser().getUsername());
+		return entry != null && authentication.getName().equals(entry.getUser().getUsername());
 	}
 
 	@Override

@@ -4,7 +4,7 @@ var date = option.val().split('-');
 
 var options = {
     width: '100%',
-    height: '400px'
+    height: '100px'
 };
 
 chart = new Chartist.Bar('.ct-chart', options);

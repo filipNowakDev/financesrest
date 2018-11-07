@@ -1,6 +1,10 @@
 package com.filip.financesrest.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -26,6 +30,8 @@ public class FinanceEntry
 
 	@NotNull(message = "Date cannot be empty.")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate date;
 
 	@ManyToOne
@@ -35,7 +41,6 @@ public class FinanceEntry
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
-	@JsonIgnore
 	private EntryCategory category;
 
 
