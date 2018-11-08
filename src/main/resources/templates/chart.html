@@ -10,10 +10,16 @@
 <div class="row">
     <div class="container">
         <div class="jumbotron">
+
+            <ul class="nav nav-tabs" id="analysisNav">
+                <li class="nav-item"><a id="monthTab" class="nav-link active" href="#sel">Month</a></li>
+                <li class="nav-item"><a id="yearTab" class="nav-link" href="#sel">Year</a></li>
+            </ul>
+
             <div class="form-group">
                 <form name="f">
                     <div class="container">
-                        <fieldset>
+                        <fieldset id="sel">
                             <legend>Select date</legend>
                             <div class="form-control">
                                 <label for="dateSelect">Category (select one):</label>
@@ -29,11 +35,13 @@
                         </fieldset>
                     </div>
                 </form>
+
                 <div class="container">
                     <div class="card">
                         <div class="ct-chart ct-perfect-fourth"></div>
                     </div>
                 </div>
+
             </div>
         </div>
 

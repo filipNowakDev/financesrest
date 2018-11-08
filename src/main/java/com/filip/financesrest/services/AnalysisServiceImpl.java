@@ -1,6 +1,8 @@
 package com.filip.financesrest.services;
 
+import com.filip.financesrest.models.Balance;
 import com.filip.financesrest.models.ILocalDateProjection;
+import com.filip.financesrest.models.YearList;
 import com.filip.financesrest.repositories.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,10 +37,25 @@ public class AnalysisServiceImpl implements AnalysisService
 	@Override
 	public int getBalanceForMonthAndCategoryForUser(long categoryId, int month, int year, String username)
 	{
-		Integer balance = entryRepository.selectBalanceByMonth(categoryId, month, year, username);
+		Integer balance = entryRepository.selectBalanceByCategoryAndMonth(categoryId, month, year, username);
 		if (balance != null)
 			return balance;
 		else
 			return 0;
+	}
+
+	@Override
+	public YearList getDistinctYearsForUser(String username)
+	{
+		return new YearList(entryRepository.selectDistinctYearsForUser(username));
+	}
+
+	@Override
+	public Balance getBalanceForMonthAndYearForUser(int month, int year, String username)
+	{
+		Double balance = entryRepository.selectBalanceForMonthAndYearForUser(month, year, username);
+		if(balance == null)
+			balance = 0.0;
+		return new Balance(balance);
 	}
 }

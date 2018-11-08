@@ -3,7 +3,6 @@ package com.filip.financesrest.repositories;
 
 import com.filip.financesrest.models.FinanceEntry;
 import com.filip.financesrest.models.ILocalDateProjection;
-import com.filip.financesrest.models.LocalDateProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -44,5 +43,20 @@ public interface EntryRepository extends JpaRepository<FinanceEntry, Long>
 			"AND MONTH(date) = ?2 " +
 			"AND YEAR(date) = ?3 " +
 			"AND user.username = ?4 ", nativeQuery = true)
-	Integer selectBalanceByMonth(long categoryId, int month, int year, String username);
+	Integer selectBalanceByCategoryAndMonth(long categoryId, int month, int year, String username);
+
+
+	@Query(value =  "select distinct year(finance_entry.date) as year " +
+			"from finance_entry join user on user.id = finance_entry.user_id" +
+			" where user.username = ?1", nativeQuery = true)
+	List<Integer> selectDistinctYearsForUser(String username);
+
+
+	@Query(value="select sum(finance_entry.value) as balance" +
+			" from finance_entry join user on user.id = finance_entry.user_id" +
+			" where month(date) = ?1 and year(date) = ?2 and username = ?3",nativeQuery = true)
+	Double selectBalanceForMonthAndYearForUser(int month, int year, String username);
+
+
+
 }

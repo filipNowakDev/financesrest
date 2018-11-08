@@ -1,11 +1,40 @@
-var option = $('#dateSelect').find('option:selected');
+/**********************************************************************************/
+// CHART SCRIPT
+/**********************************************************************************/
+// OPTION REPLACEMENT MODULE DEFINITION
+$.fn.replaceOptions = function(options) {
+    var self, $option;
+
+    this.empty();
+    self = this;
+
+    $.each(options, function(index, option) {
+        $option = $("<option></option>")
+            .attr("value", option.value)
+            .text(option.text);
+        self.append($option);
+    });
+};
+
+/**********************************************************************************/
+// DECLARING ELEMENTS
+
+var dateSelect = $('#dateSelect');
+var monthTab = $('#monthTab');
+var yearTab = $('#yearTab');
+
+/**********************************************************************************/
+// CHART CONFIGURATION
+
+var option = dateSelect.find('option:selected');
 var date = option.val().split('-');
-
-
 var options = {
     width: '100%',
     height: '100px'
 };
+
+/**********************************************************************************/
+// CHART DRAWING
 
 chart = new Chartist.Bar('.ct-chart', options);
 
@@ -14,10 +43,6 @@ getData.done(function (data) {
     data.series = [data.series];
     chart.update(data);
 });
-
-
-
-
 
 
 var red = '#ff0000';
@@ -38,9 +63,10 @@ chart.on('draw', function (context) {
     }
 });
 
-$('#dateSelect').change(function () {
-
-
+/**********************************************************************************/
+// PAGE OPERATION
+// TODO ADD CHANGING CHART MODES
+dateSelect.change(function () {
     var option = $(this).find('option:selected');
     var date = option.val().split('-');
     var getData = $.get('/api/analysis/chart/date/' + date[1] + '/' + date[0]);
@@ -51,3 +77,34 @@ $('#dateSelect').change(function () {
     });
 
 });
+
+
+//TODO ADD FETCHING DATA TO SELECT
+monthTab.click(function () {
+    yearTab.removeClass('active');
+    monthTab.addClass('active');
+});
+
+
+yearTab.click(function () {
+    monthTab.removeClass('active');
+    yearTab.addClass('active');
+    var getYears = $.get('/api/analysis/years');
+    getYears.done(function (response) {
+        var options = [];
+        response.years.forEach(function (year) {
+            options.push(
+                {
+                    text : year.toString(),
+                    value : year
+                }
+            )
+        });
+        dateSelect.replaceOptions(options);
+    });
+
+});
+
+
+/**********************************************************************************/
+// EOF

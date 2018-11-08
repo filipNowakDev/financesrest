@@ -65,8 +65,8 @@ public class AnalysisServiceImplTest
 	@Test
 	public void getBalanceForMonthAndCategoryForUser_returnBalance()
 	{
-		given(entryRepository.selectBalanceByMonth(1, 10, 2018, "user")).willReturn(123);
-		given(entryRepository.selectBalanceByMonth(1, 4, 2018, "user")).willReturn(null);
+		given(entryRepository.selectBalanceByCategoryAndMonth(1, 10, 2018, "user")).willReturn(123);
+		given(entryRepository.selectBalanceByCategoryAndMonth(1, 4, 2018, "user")).willReturn(null);
 
 		int balance_pos = analysisService.getBalanceForMonthAndCategoryForUser(1, 10, 2018, "user");
 		int balance_neg = analysisService.getBalanceForMonthAndCategoryForUser(1, 4, 2018, "user");
