@@ -1,14 +1,28 @@
 /**********************************************************************************/
 // CHART SCRIPT
+
+var month = [];
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
 /**********************************************************************************/
 // OPTION REPLACEMENT MODULE DEFINITION
-$.fn.replaceOptions = function(options) {
+$.fn.replaceOptions = function (options) {
     var self, $option;
 
     this.empty();
     self = this;
 
-    $.each(options, function(index, option) {
+    $.each(options, function (index, option) {
         $option = $("<option></option>")
             .attr("value", option.value)
             .text(option.text);
@@ -79,10 +93,21 @@ dateSelect.change(function () {
 });
 
 
-//TODO ADD FETCHING DATA TO SELECT
 monthTab.click(function () {
     yearTab.removeClass('active');
     monthTab.addClass('active');
+    var getDates = $.get('/api/analysis/dates');
+    getDates.done(function (dates) {
+        var options = [];
+        dates.forEach(function (date) {
+            options.push(
+                {
+                    text: date[0] + " | " + month[date[1] - 1],
+                    value: date[0] + "-" + date[1] + "-" + date[2]
+                })
+        });
+        dateSelect.replaceOptions(options);
+    })
 });
 
 
@@ -95,8 +120,8 @@ yearTab.click(function () {
         response.years.forEach(function (year) {
             options.push(
                 {
-                    text : year.toString(),
-                    value : year
+                    text: year.toString(),
+                    value: year
                 }
             )
         });

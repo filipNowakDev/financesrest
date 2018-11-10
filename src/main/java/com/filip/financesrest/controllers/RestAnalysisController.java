@@ -1,10 +1,7 @@
 package com.filip.financesrest.controllers;
 
 
-import com.filip.financesrest.models.Balance;
-import com.filip.financesrest.models.ChartData;
-import com.filip.financesrest.models.EntryCategory;
-import com.filip.financesrest.models.YearList;
+import com.filip.financesrest.models.*;
 import com.filip.financesrest.services.AnalysisService;
 import com.filip.financesrest.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -53,6 +51,12 @@ public class RestAnalysisController
 	public YearList getDistinctUserYears(Authentication authentication)
 	{
 		return analysisService.getDistinctYearsForUser(authentication.getName());
+	}
+
+	@RequestMapping("/dates")
+	public List<LocalDate> getDistinctUserYearsAndMonths(Authentication authentication)
+	{
+		return analysisService.getDistinctMonthsAndYearsForUser(authentication.getName());
 	}
 
 	@RequestMapping("/balance/{month}/{year}")

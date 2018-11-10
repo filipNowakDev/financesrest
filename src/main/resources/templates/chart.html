@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head th:replace="partial/header :: header"/>
+<head th:replace="partial/header :: header"></head>
 
 <body>
 
-<nav th:replace="partial/nav :: navbar"/>
+<nav th:replace="partial/nav :: navbar"></nav>
 
 <div class="row">
     <div class="container">
@@ -26,7 +26,7 @@
                                 <select class="form-control" name="dateSelect" id="dateSelect">
                                     <option th:each="date : ${dates}"
                                             th:value="${date}"
-                                            th:text="${date.getMonth().getDisplayName(style, locale) + ' | ' + date.getYear()}">
+                                            th:text="${date.getYear() + ' | ' + date.getMonth().getDisplayName(style, locale)}">
                                         ...
                                     </option>
                                 </select>
@@ -48,7 +48,7 @@
     </div>
 </div>
 
-<div th:replace="partial/footer :: scripts"/>
+<div th:replace="partial/footer :: scripts"></div>
 <script src="/static/js/chart.js" th:src="@{/resources/js/chart.js}"></script>
 
 </body>
