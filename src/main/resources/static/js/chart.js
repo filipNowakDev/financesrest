@@ -14,6 +14,19 @@ month[8] = "September";
 month[9] = "October";
 month[10] = "November";
 month[11] = "December";
+
+
+var chartDataSource = {
+    mode: "month",
+    getPath: function (year, month) {
+        if (this.mode === "month") {
+            return '/api/analysis/chart/date/' + month + '/' + year;
+        }
+        else if (this.mode === 'year') {
+            return '/api/analysis/chart/year/' + year;
+        }
+    }
+};
 /**********************************************************************************/
 // OPTION REPLACEMENT MODULE DEFINITION
 $.fn.replaceOptions = function (options) {
@@ -52,7 +65,7 @@ var options = {
 
 chart = new Chartist.Bar('.ct-chart', options);
 
-var getData = $.get('/api/analysis/chart/date/' + date[1] + '/' + date[0]);
+var getData = $.get(chartDataSource.getPath(date[0], date[1]));
 getData.done(function (data) {
     data.series = [data.series];
     chart.update(data);
@@ -79,11 +92,10 @@ chart.on('draw', function (context) {
 
 /**********************************************************************************/
 // PAGE OPERATION
-// TODO ADD CHANGING CHART MODES
 dateSelect.change(function () {
     var option = $(this).find('option:selected');
     var date = option.val().split('-');
-    var getData = $.get('/api/analysis/chart/date/' + date[1] + '/' + date[0]);
+    var getData = $.get(chartDataSource.getPath(date[0], date[1]));
 
     getData.done(function (data) {
         data.series = [data.series];
@@ -107,6 +119,8 @@ monthTab.click(function () {
                 })
         });
         dateSelect.replaceOptions(options);
+        chartDataSource.mode = "month";
+        dateSelect.trigger('change');
     })
 });
 
@@ -126,6 +140,8 @@ yearTab.click(function () {
             )
         });
         dateSelect.replaceOptions(options);
+        chartDataSource.mode = "year";
+        dateSelect.trigger('change');
     });
 
 });
